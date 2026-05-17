@@ -1,0 +1,9 @@
+[package]
+name = "basecoat-core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Core types, prop structs, and class-string functions for basecoat-rs"
+
+[dependencies]
+basecoat-core-macros = { workspace = true }

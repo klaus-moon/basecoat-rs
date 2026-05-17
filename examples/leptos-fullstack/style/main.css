@@ -1,0 +1,6 @@
+/* Loaded by cargo-leptos; injected into the page as /pkg/leptos-fullstack.css.
+   basecoat CSS is loaded from the CDN <link> in App — keep this file as a
+   placeholder for any app-specific overrides. */
+body {
+    font-family: system-ui, sans-serif;
+}

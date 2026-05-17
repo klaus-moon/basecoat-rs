@@ -1,0 +1,15 @@
+[package]
+name = "basecoat-smoke-tests"
+edition.workspace = true
+license.workspace = true
+publish = false
+
+[[bin]]
+name = "smoke"
+path = "src/main.rs"
+
+[dependencies]
+headless_chrome = "1"
+serde_json = "1"
+anyhow = "1"
+ctrlc = "3"

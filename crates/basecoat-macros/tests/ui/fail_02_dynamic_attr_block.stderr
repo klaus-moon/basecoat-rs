@@ -1,0 +1,5 @@
+error: dynamic attribute block is not supported in rsx!
+ --> tests/ui/fail_02_dynamic_attr_block.rs:5:25
+  |
+5 |     let _ = rsx! { <div {"some-key"}>"content"</div> };
+  |                         ^^^^^^^^^^^^

@@ -1,0 +1,25 @@
+[package]
+name = "basecoat-macros"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "rsx! proc-macro for basecoat-rs (rstml-based DSL)"
+
+[lib]
+proc-macro = true
+
+[features]
+# Enable trybuild integration tests. Requires basecoat-components to be
+# fully implemented (Phase 2a). Do not enable until that crate is ready.
+full-tests = []
+
+[dependencies]
+proc-macro2 = { workspace = true }
+quote = { workspace = true }
+syn = { workspace = true }
+rstml = { workspace = true }
+
+[dev-dependencies]
+trybuild = "1"
+basecoat-core = { workspace = true }
+basecoat-macros-rt = { workspace = true }

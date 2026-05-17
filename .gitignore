@@ -1,0 +1,16 @@
+target/
+*.swp
+*.swo
+.DS_Store
+.idea/
+.vscode/
+*.orig
+.vscode
+.omc
+
+# wasm-pack output (reproducible via `cargo xtask build-wasm`)
+crates/basecoat-controllers/pkg/
+
+# Example build artifacts
+examples/static-site/dist/
+

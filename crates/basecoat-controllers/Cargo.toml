@@ -1,0 +1,46 @@
+[package]
+name = "basecoat-controllers"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "WASM controllers for interactive basecoat-rs components"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[features]
+default = ["dialog", "tabs", "toast", "panic-hook"]
+dialog = []
+tabs = []
+toast = []
+panic-hook = ["console_error_panic_hook"]
+
+[dependencies]
+wasm-bindgen = { workspace = true }
+js-sys = { workspace = true }
+web-sys = { workspace = true, features = [
+    "Window",
+    "Document",
+    "Element",
+    "HtmlElement",
+    "HtmlDialogElement",
+    "HtmlButtonElement",
+    "Event",
+    "EventInit",
+    "EventTarget",
+    "CustomEvent",
+    "CustomEventInit",
+    "KeyboardEvent",
+    "MouseEvent",
+    "MouseEventInit",
+    "FocusEvent",
+    "NodeList",
+    "DomTokenList",
+    "DomRect",
+    "console",
+] }
+console_error_panic_hook = { version = "0.1", optional = true }
+
+[dev-dependencies]
+wasm-bindgen-test = "0.3"
+wasm-bindgen-futures = "0.4"

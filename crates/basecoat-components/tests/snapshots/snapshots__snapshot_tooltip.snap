@@ -1,0 +1,5 @@
+---
+source: crates/basecoat-components/tests/snapshots.rs
+expression: html.to_string()
+---
+<span data-tooltip="Helpful hint"><button type="button" class="btn-outline">Hover me</button></span>

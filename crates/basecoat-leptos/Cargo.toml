@@ -1,0 +1,19 @@
+[package]
+name = "basecoat-leptos"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Leptos component wrappers for basecoat-rs"
+
+[dependencies]
+basecoat-core = { workspace = true }
+leptos = { version = "0.8", default-features = false }
+
+[features]
+default = ["csr"]
+csr = ["leptos/csr"]
+ssr = ["leptos/ssr"]
+hydrate = ["leptos/hydrate"]
+
+[dev-dependencies]
+leptos = { version = "0.8", features = ["csr"] }

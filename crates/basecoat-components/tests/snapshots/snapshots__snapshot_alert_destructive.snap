@@ -1,0 +1,5 @@
+---
+source: crates/basecoat-components/tests/snapshots.rs
+expression: html.to_string()
+---
+<div class="alert-destructive"><h2>Error</h2><section>Something went wrong.</section></div>

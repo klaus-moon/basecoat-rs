@@ -1,0 +1,5 @@
+---
+source: crates/basecoat-components/tests/snapshots.rs
+expression: html.to_string()
+---
+<div class="tabs" id="demo-tabs" data-tabs data-basecoat-hydrate="tabs" data-basecoat-version="0.1"><nav role="tablist" aria-orientation="horizontal"><button type="button" role="tab" id="demo-tabs-tab-1" aria-controls="demo-tabs-panel-1" aria-selected="false" tabindex="0">Account</button><button type="button" role="tab" id="demo-tabs-tab-2" aria-controls="demo-tabs-panel-2" aria-selected="false" tabindex="0">Password</button></nav><div role="tabpanel" id="demo-tabs-panel-1" aria-labelledby="demo-tabs-tab-1" tabindex="-1" aria-selected="false" hidden>Account panel content</div><div role="tabpanel" id="demo-tabs-panel-2" aria-labelledby="demo-tabs-tab-2" tabindex="-1" aria-selected="false" hidden>Password panel content</div></div>

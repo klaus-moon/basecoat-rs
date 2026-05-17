@@ -1,0 +1,5 @@
+error: closure binding attributes are not supported in rsx!; use attr={expr} instead
+ --> tests/ui/fail_03_closure_binding_attr.rs:5:25
+  |
+5 |     let _ = rsx! { <div on(x)>"content"</div> };
+  |                         ^^^^^

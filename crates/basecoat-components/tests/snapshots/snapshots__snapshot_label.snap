@@ -1,0 +1,5 @@
+---
+source: crates/basecoat-components/tests/snapshots.rs
+expression: html.to_string()
+---
+<label class="label" for="email">Email address</label>

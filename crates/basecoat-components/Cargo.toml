@@ -1,0 +1,15 @@
+[package]
+name = "basecoat-components"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "HTML-string component functions for basecoat-rs"
+
+[dependencies]
+basecoat-core = { workspace = true }
+
+[build-dependencies]
+basecoat-core = { workspace = true }
+
+[dev-dependencies]
+insta = "1"

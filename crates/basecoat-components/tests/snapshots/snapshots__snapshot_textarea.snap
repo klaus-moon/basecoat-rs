@@ -1,0 +1,5 @@
+---
+source: crates/basecoat-components/tests/snapshots.rs
+expression: html.to_string()
+---
+<textarea class="textarea" placeholder="Type your message here"></textarea>

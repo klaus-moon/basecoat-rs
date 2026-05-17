@@ -1,0 +1,22 @@
+[package]
+name = "basecoat-rs"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Rust port of basecoat UI: rsx! macro on rstml + WASM controllers + Leptos adapter"
+keywords = ["ui", "components", "tailwind", "ssr", "leptos"]
+categories = ["web-programming", "template-engine"]
+
+[dependencies]
+basecoat-core = { workspace = true }
+basecoat-components = { workspace = true }
+basecoat-macros = { workspace = true }
+basecoat-macros-rt = { workspace = true }
+basecoat-leptos = { workspace = true, optional = true }
+
+[features]
+default = []
+leptos = ["dep:basecoat-leptos"]
+ssr = ["leptos", "basecoat-leptos/ssr"]
+hydrate = ["leptos", "basecoat-leptos/hydrate"]
+csr = ["leptos", "basecoat-leptos/csr"]

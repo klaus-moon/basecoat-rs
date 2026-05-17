@@ -1,0 +1,5 @@
+/* Tailwind v4 entry compiled by cargo-leptos.
+   Includes Tailwind utilities plus basecoat-css component layers. */
+@import "tailwindcss";
+@source "../src";
+@import "./basecoat.css";

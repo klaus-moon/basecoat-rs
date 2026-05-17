@@ -1,0 +1,5 @@
+---
+source: crates/basecoat-components/tests/snapshots.rs
+expression: html.to_string()
+---
+<div class="card"><header><h2>Title</h2></header><section>Body</section></div>

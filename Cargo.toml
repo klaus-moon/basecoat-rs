@@ -1,0 +1,53 @@
+[workspace]
+resolver = "3"
+members = [
+    "crates/basecoat-core",
+    "crates/basecoat-core-macros",
+    "crates/basecoat-components",
+    "crates/basecoat-macros",
+    "crates/basecoat-macros-rt",
+    "crates/basecoat-controllers",
+    "crates/basecoat-leptos",
+    "crates/basecoat-rs",
+    "examples/static-site",
+    "examples/axum-ssr",
+    "examples/leptos-islands",
+    "examples/leptos-fullstack",
+    "crates/basecoat-smoke-tests",
+    "xtask",
+]
+
+[workspace.package]
+edition = "2024"
+version = "0.1.0"
+license = "MIT"
+authors = ["The basecoat-rs contributors"]
+repository = "https://github.com/kyureion/basecoat-rs"
+
+[workspace.dependencies]
+# Proc-macro utilities
+proc-macro2 = "1"
+quote = "1"
+syn = { version = "2", features = ["full", "extra-traits"] }
+rstml = "0.12"
+
+# WASM / web
+wasm-bindgen = "0.2"
+web-sys = "0.3"
+js-sys = "0.3"
+
+# Web frameworks (used by examples)
+axum = "0.7"
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+tower-http = { version = "0.5", features = ["fs"] }
+leptos = { version = "0.8", default-features = false }
+
+# Internal crates
+basecoat-core = { path = "crates/basecoat-core" }
+basecoat-core-macros = { path = "crates/basecoat-core-macros" }
+basecoat-components = { path = "crates/basecoat-components" }
+basecoat-macros = { path = "crates/basecoat-macros" }
+basecoat-macros-rt = { path = "crates/basecoat-macros-rt" }
+basecoat-controllers = { path = "crates/basecoat-controllers" }
+basecoat-leptos = { path = "crates/basecoat-leptos" }
+basecoat-rs = { path = "crates/basecoat-rs" }

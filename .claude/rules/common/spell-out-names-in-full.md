@@ -1,0 +1,1 @@
+Unless a well-known acronym is used (such as HTTPS), use fully spelled-out names. Especially do NOT do something like "Auth" when the whole word is "Authentication". "Admin" or similar type of well-established short form names are exceptions.

@@ -1,0 +1,18 @@
+[package]
+name = "static-site"
+version = "0.1.0"
+edition.workspace = true
+publish = false
+description = "Example: rsx! to static HTML file — no web framework required"
+
+[[bin]]
+name = "static-site"
+path = "src/main.rs"
+
+[dependencies]
+basecoat-rs = { workspace = true }
+# rsx! emits absolute paths ::basecoat_core and ::basecoat_components.
+# Those crates must be direct deps (extern-prelude) of any crate using rsx!.
+basecoat-core = { workspace = true }
+basecoat-components = { workspace = true }
+basecoat-macros-rt = { workspace = true }
