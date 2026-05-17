@@ -3,7 +3,7 @@ name = "leptos-islands"
 version = "0.1.0"
 edition.workspace = true
 publish = false
-description = "Example: Leptos CSR components via basecoat-rs leptos feature"
+description = "Example: Leptos CSR components via basecoat leptos feature"
 
 [[bin]]
 name = "leptos-islands"
@@ -13,4 +13,4 @@ path = "src/main.rs"
 # CSR-only: the simplest path for v0.1. Full Leptos SSR requires a separate
 # build pipeline (cargo-leptos, WASM target, server/client split) that is
 # out of scope for this example. See the README in this directory.
-basecoat-rs = { workspace = true, features = ["csr"] }
+basecoat = { workspace = true, features = ["csr"] }

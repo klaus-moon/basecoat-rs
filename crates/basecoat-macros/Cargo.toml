@@ -3,7 +3,12 @@ name = "basecoat-macros"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
+authors.workspace = true
+repository.workspace = true
+readme = "../../README.md"
 description = "rsx! proc-macro for basecoat-rs (rstml-based DSL)"
+keywords = ["rsx", "html", "macro", "proc-macro", "template"]
+categories = ["web-programming", "template-engine"]
 
 [lib]
 proc-macro = true

@@ -3,7 +3,11 @@ name = "basecoat-leptos"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
+authors.workspace = true
+repository.workspace = true
 description = "Leptos component wrappers for basecoat-rs"
+keywords = ["leptos", "ui", "components", "tailwind", "ssr"]
+categories = ["web-programming", "gui"]
 
 [dependencies]
 basecoat-core = { workspace = true }

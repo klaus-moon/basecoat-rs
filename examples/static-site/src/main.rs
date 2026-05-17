@@ -13,12 +13,12 @@
 
 use std::borrow::Cow;
 
-use basecoat_rs::components::{
+use basecoat::components::{
     SubProps, card, card_content, card_description, card_footer, card_header, card_title, tabs,
 };
-use basecoat_rs::{BadgeVariant, ButtonVariant, CardProps, Children, TabSet, TabsProps, rsx};
+use basecoat::{BadgeVariant, ButtonVariant, CardProps, Children, TabSet, TabsProps, rsx};
 
-fn build_card() -> basecoat_rs::Markup {
+fn build_card() -> basecoat::Markup {
     let title = card_title(
         SubProps::builder()
             .children(Children::from("Example Card".to_owned()))
@@ -56,7 +56,7 @@ fn build_card() -> basecoat_rs::Markup {
     )
 }
 
-fn build_tabs() -> basecoat_rs::Markup {
+fn build_tabs() -> basecoat::Markup {
     let tabsets = vec![
         TabSet {
             tab: Cow::Borrowed("Overview"),

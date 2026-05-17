@@ -3,7 +3,7 @@ name = "leptos-fullstack"
 edition.workspace = true
 license.workspace = true
 publish = false
-description = "Example: Leptos SSR + hydration full-stack app using basecoat-rs"
+description = "Example: Leptos SSR + hydration full-stack app using basecoat"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
@@ -14,7 +14,7 @@ path = "src/main.rs"
 required-features = ["ssr"]
 
 [dependencies]
-basecoat-rs = { path = "../../crates/basecoat-rs", features = ["leptos"] }
+basecoat = { path = "../../crates/basecoat", features = ["leptos"] }
 basecoat-core = { path = "../../crates/basecoat-core" }
 leptos = { version = "0.8", default-features = false }
 leptos_meta = { version = "0.8", default-features = false }
@@ -36,7 +36,7 @@ web-sys = { version = "0.3", optional = true }
 [features]
 hydrate = [
     "leptos/hydrate",
-    "basecoat-rs/hydrate",
+    "basecoat/hydrate",
     "dep:console_error_panic_hook",
     "dep:wasm-bindgen",
     "dep:js-sys",
@@ -46,7 +46,7 @@ ssr = [
     "leptos/ssr",
     "leptos_meta/ssr",
     "leptos_router/ssr",
-    "basecoat-rs/ssr",
+    "basecoat/ssr",
     "dep:axum",
     "dep:tokio",
     "dep:tower",

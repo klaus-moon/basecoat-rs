@@ -2,7 +2,7 @@ use basecoat_core::{
     BadgeProps as CoreBadgeProps, BadgeVariant, ButtonProps as CoreButtonProps, ButtonVariant,
     classes,
 };
-use basecoat_rs::leptos::{
+use basecoat::leptos::{
     DialogContent, DialogTrigger, Tabs, TabsList, TabsPanel, TabsTab, Toaster,
 };
 use leptos::prelude::*;
@@ -112,7 +112,7 @@ fn show_toast(_title: &str, _description: &str, _category: &str) {}
 /// A reactive counter demo that increments on button click.
 ///
 /// Renders a native `<button>` and `<span>` directly, applying class strings
-/// from `basecoat_core::classes`. Using the `basecoat_rs::leptos::Button` /
+/// from `basecoat_core::classes`. Using the `basecoat::leptos::Button` /
 /// `Badge` wrappers with reactive closure children currently triggers a Leptos
 /// hydration mismatch (`button.rs:34` — expected text node, found element).
 /// Tracked for v0.2 of `basecoat-leptos`; native HTML + shared class strings

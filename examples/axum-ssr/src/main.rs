@@ -26,8 +26,8 @@
 use std::borrow::Cow;
 
 use axum::{Router, response::Html, response::Response, routing::get};
-use basecoat_rs::components::{dialog, tabs, toaster};
-use basecoat_rs::{ButtonVariant, Children, DialogProps, TabSet, TabsProps, ToasterProps, rsx};
+use basecoat::components::{dialog, tabs, toaster};
+use basecoat::{ButtonVariant, Children, DialogProps, TabSet, TabsProps, ToasterProps, rsx};
 use tower_http::services::ServeDir;
 
 /// Compiled CSS embedded at build time.
@@ -81,7 +81,7 @@ fn render_page() -> String {
     let dialog_html = dialog(
         DialogProps::builder()
             .id(Cow::Borrowed("demo-dialog"))
-            .trigger(Some(basecoat_rs::Markup::from("Open Dialog")))
+            .trigger(Some(basecoat::Markup::from("Open Dialog")))
             .title(Cow::Borrowed("Confirm Action"))
             .description(Cow::Borrowed(
                 "This dialog is rendered server-side and hydrated by the WASM controller.",

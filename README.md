@@ -3,7 +3,7 @@
 basecoat UI for Rust: `rsx!` macro on rstml + WASM controllers + Leptos adapter.
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
-[![Crates.io](https://img.shields.io/crates/v/basecoat-rs.svg)](https://crates.io/crates/basecoat-rs)
+[![Crates.io](https://img.shields.io/crates/v/basecoat.svg)](https://crates.io/crates/basecoat)
 
 A Rust port of [basecoat](https://github.com/hunvreus/basecoat) — a framework-agnostic,
 Tailwind-based UI component library (itself a port of shadcn/ui for HTML templates).
@@ -15,14 +15,14 @@ Tailwind-based UI component library (itself a port of shadcn/ui for HTML templat
 ```toml
 # Cargo.toml
 [dependencies]
-basecoat-rs        = "0.1"
-basecoat-core      = "0.1"       # required: rsx! emits ::basecoat_core paths
-basecoat-components = "0.1"      # required: rsx! emits ::basecoat_components paths
-basecoat-macros-rt = "0.1"       # required: rsx! emits ::basecoat_macros_rt paths
+basecoat            = "0.1"
+basecoat-core       = "0.1"       # required: rsx! emits ::basecoat_core paths
+basecoat-components = "0.1"       # required: rsx! emits ::basecoat_components paths
+basecoat-macros-rt  = "0.1"       # required: rsx! emits ::basecoat_macros_rt paths
 ```
 
 ```rust
-use basecoat_rs::{rsx, ButtonVariant};
+use basecoat::{rsx, ButtonVariant};
 
 let html = rsx! {
     <Button variant=ButtonVariant::Primary>"Save"</Button>
@@ -81,11 +81,11 @@ cargo run -p leptos-islands
 ```
 
 This v0.1 example is a **CLI sanity check**, not a live browser app — it
-imports every `basecoat_rs::leptos::*` component and prints their resolved type
+imports every `basecoat::leptos::*` component and prints their resolved type
 names to prove the feature gate works. For a real browser app, follow
 `examples/leptos-islands/README.md` and the [Leptos SSR
 guide](https://book.leptos.dev/) — set `features = ["hydrate"]` on
-`basecoat-rs` and use `cargo-leptos` for the two-target build.
+`basecoat` and use `cargo-leptos` for the two-target build.
 
 ### `static-site` — zero-framework HTML generation
 
@@ -170,6 +170,16 @@ Three design bets differentiate this library from ad-hoc component modules:
 - [INTEGRATION.md](./INTEGRATION.md) — framework integration contract
 - [SYNTAX.md](./crates/basecoat-macros/SYNTAX.md) — rsx! macro language spec
 - [LICENSE](./LICENSE) — MIT
+
+---
+
+## Development & AI disclosure
+
+Substantial portions of basecoat-rs — including the `rsx!` proc-macro, the
+component implementations, and the WASM controllers — were authored with the
+help of large language models (Anthropic Claude). Every commit was reviewed
+and tested by a human before landing on `main`. Bug reports and PRs are
+welcome regardless of how a given line was originally drafted.
 
 ---
 

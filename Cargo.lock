@@ -235,10 +235,10 @@ name = "axum-ssr"
 version = "0.1.0"
 dependencies = [
  "axum 0.7.9",
+ "basecoat",
  "basecoat-components",
  "basecoat-core",
  "basecoat-macros-rt",
- "basecoat-rs",
  "tokio",
  "tower-http 0.5.2",
 ]
@@ -254,6 +254,17 @@ name = "base64"
 version = "0.22.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "72b3254f16251a8381aa12e40e3c4d2f0199f8c6508fbecb9d91f575e0fbb8c6"
+
+[[package]]
+name = "basecoat"
+version = "0.1.0"
+dependencies = [
+ "basecoat-components",
+ "basecoat-core",
+ "basecoat-leptos",
+ "basecoat-macros",
+ "basecoat-macros-rt",
+]
 
 [[package]]
 name = "basecoat-components"
@@ -315,17 +326,6 @@ dependencies = [
 [[package]]
 name = "basecoat-macros-rt"
 version = "0.1.0"
-
-[[package]]
-name = "basecoat-rs"
-version = "0.1.0"
-dependencies = [
- "basecoat-components",
- "basecoat-core",
- "basecoat-leptos",
- "basecoat-macros",
- "basecoat-macros-rt",
-]
 
 [[package]]
 name = "basecoat-smoke-tests"
@@ -1412,8 +1412,8 @@ name = "leptos-fullstack"
 version = "0.0.0"
 dependencies = [
  "axum 0.8.9",
+ "basecoat",
  "basecoat-core",
- "basecoat-rs",
  "console_error_panic_hook",
  "js-sys",
  "leptos",
@@ -1431,7 +1431,7 @@ dependencies = [
 name = "leptos-islands"
 version = "0.1.0"
 dependencies = [
- "basecoat-rs",
+ "basecoat",
 ]
 
 [[package]]
@@ -2494,10 +2494,10 @@ checksum = "6ce2be8dc25455e1f91df71bfa12ad37d7af1092ae736f3a6cd0e37bc7810596"
 name = "static-site"
 version = "0.1.0"
 dependencies = [
+ "basecoat",
  "basecoat-components",
  "basecoat-core",
  "basecoat-macros-rt",
- "basecoat-rs",
 ]
 
 [[package]]

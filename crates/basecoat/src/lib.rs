@@ -1,14 +1,14 @@
-//! `basecoat-rs` — umbrella re-export crate.
+//! `basecoat` — umbrella re-export crate.
 //!
 //! This is the single entry point for consuming basecoat UI components in Rust.
-//! Add `basecoat-rs` to your `Cargo.toml` and import everything from here.
+//! Add `basecoat` to your `Cargo.toml` and import everything from here.
 //!
 //! # 30-second start
 //!
 //! ```
-//! use basecoat_rs::{rsx, ButtonVariant};
+//! use basecoat::{rsx, ButtonVariant};
 //!
-//! let html: basecoat_rs::Markup = rsx! {
+//! let html: basecoat::Markup = rsx! {
 //!     <Button variant={ButtonVariant::Primary}>"Click"</Button>
 //! };
 //! assert!(html.to_string().contains("btn-primary"));
@@ -29,7 +29,7 @@ pub use basecoat_macros::rsx;
 // The code emitted by `rsx!` calls `::basecoat_macros_rt::escape_attr` and
 // `::basecoat_macros_rt::escape_text` as absolute paths.  For those paths to
 // resolve in user crates, `basecoat_macros_rt` must be linked into the
-// compilation unit.  Re-exporting it here (so that `basecoat-rs` depends on
+// compilation unit.  Re-exporting it here (so that `basecoat` depends on
 // it) satisfies the linker, because Cargo propagates the `extern crate` for
 // every transitive dependency.
 pub use basecoat_macros_rt;

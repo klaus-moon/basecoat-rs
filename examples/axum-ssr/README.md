@@ -49,7 +49,7 @@ to scan Rust source files for utility class names:
 @source "../crates/basecoat-core/src";
 @source "../crates/basecoat-components/src";
 @source "../crates/basecoat-leptos/src";
-@source "../crates/basecoat-rs/src";
+@source "../crates/basecoat/src";
 @source "../examples";
 ```
 

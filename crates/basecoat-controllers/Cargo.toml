@@ -3,7 +3,12 @@ name = "basecoat-controllers"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
+authors.workspace = true
+repository.workspace = true
+readme = "../../README.md"
 description = "WASM controllers for interactive basecoat-rs components"
+keywords = ["wasm", "ui", "dialog", "tabs", "toast"]
+categories = ["wasm", "web-programming"]
 
 [lib]
 crate-type = ["cdylib", "rlib"]

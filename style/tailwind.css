@@ -11,7 +11,7 @@
 @source "../crates/basecoat-core/src";
 @source "../crates/basecoat-components/src";
 @source "../crates/basecoat-leptos/src";
-@source "../crates/basecoat-rs/src";
+@source "../crates/basecoat/src";
 
 /* Scan example apps. */
 @source "../examples";

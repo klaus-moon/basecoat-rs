@@ -1,7 +1,7 @@
 # Integration Guide
 
-basecoat-rs integration contract for v0.1. This is the stable API surface that
-downstream frameworks depend on.
+Integration contract for basecoat v0.1 on Rust. This is the stable API surface
+that downstream frameworks depend on.
 
 ---
 
@@ -9,7 +9,7 @@ downstream frameworks depend on.
 
 - `rsx!` emits absolute crate paths (`::basecoat_core`, `::basecoat_components`,
   `::basecoat_macros_rt`). Add all three as **direct** Cargo dependencies alongside
-  `basecoat-rs` — they are re-exported but must be in the extern prelude.
+  `basecoat` — they are re-exported but must be in the extern prelude.
 - The `Markup` type wraps a pre-escaped HTML string. Call `.to_string()` to get the
   `String` you put in your HTTP response.
 - The WASM bundle (`basecoat_controllers.js`) is loaded once per page. It
@@ -21,7 +21,7 @@ downstream frameworks depend on.
 
 ```toml
 [dependencies]
-basecoat-rs         = "0.1"
+basecoat            = "0.1"
 basecoat-core       = "0.1"
 basecoat-components = "0.1"
 basecoat-macros-rt  = "0.1"
@@ -32,9 +32,9 @@ basecoat-macros-rt  = "0.1"
 ## Render server-side
 
 ```rust
-use basecoat_rs::{rsx, ButtonVariant};
+use basecoat::{rsx, ButtonVariant};
 
-let html: basecoat_rs::Markup = rsx! {
+let html: basecoat::Markup = rsx! {
     <Button variant=ButtonVariant::Primary>"Save"</Button>
 };
 let html_string: String = html.to_string();
@@ -80,8 +80,8 @@ fn index() -> RawHtml<String> {
 
 ```rust
 // Build component outside rsx! when props need Cow values.
-use basecoat_rs::components::dialog;
-use basecoat_rs::{Children, DialogProps};
+use basecoat::components::dialog;
+use basecoat::{Children, DialogProps};
 use std::borrow::Cow;
 
 let html = dialog(DialogProps::builder()
@@ -203,7 +203,7 @@ Install Node 20+ (one-time), then:
    We don't publish an npm package yet (v0.1) — for now, vendor `style/basecoat.css`
    from the basecoat-rs repo into your project. Once we publish to npm, downstream
    users will be able to `npm install basecoat-rs` for the CSS bundle alongside
-   `cargo add basecoat-rs`.
+   `cargo add basecoat`.
 
 4. **Add a build script** to `package.json`:
    ```json
@@ -252,19 +252,19 @@ source available at build time).
 
 | Upstream basecoat name | Rust `rsx!` tag | Leptos component | Direct function |
 |------------------------|-----------------|------------------|-----------------|
-| `<button>` | `<Button>` | `<Button>` | `basecoat_rs::components::button(props)` |
-| `<badge>` | `<Badge>` | `<Badge>` | `basecoat_rs::components::badge(props)` |
-| `<alert>` | `<Alert>` | `<Alert>` | `basecoat_rs::components::alert(props)` |
-| `<card>` | `<Card>` | `<Card>` | `basecoat_rs::components::card(props)` |
-| `<dialog>` | — (use builder) | `<Dialog>` | `basecoat_rs::components::dialog(props)` |
-| `<tabs>` | — (use builder) | `<Tabs>` | `basecoat_rs::components::tabs(props)` |
-| `<toast>` | — (use builder) | `<Toast>` | `basecoat_rs::components::toast(props)` |
-| `<toaster>` | — (use builder) | `<Toaster>` | `basecoat_rs::components::toaster(props)` |
-| `<tooltip>` | `<Tooltip>` | `<Tooltip>` | `basecoat_rs::components::tooltip(props)` |
-| `<input>` | `<Input>` | `<Input>` | `basecoat_rs::components::input(props)` |
-| `<label>` | `<Label>` | `<Label>` | `basecoat_rs::components::label(props)` |
-| `<separator>` | `<Separator>` | `<Separator>` | `basecoat_rs::components::separator(props)` |
-| `<textarea>` | `<Textarea>` | `<Textarea>` | `basecoat_rs::components::textarea(props)` |
+| `<button>` | `<Button>` | `<Button>` | `basecoat::components::button(props)` |
+| `<badge>` | `<Badge>` | `<Badge>` | `basecoat::components::badge(props)` |
+| `<alert>` | `<Alert>` | `<Alert>` | `basecoat::components::alert(props)` |
+| `<card>` | `<Card>` | `<Card>` | `basecoat::components::card(props)` |
+| `<dialog>` | — (use builder) | `<Dialog>` | `basecoat::components::dialog(props)` |
+| `<tabs>` | — (use builder) | `<Tabs>` | `basecoat::components::tabs(props)` |
+| `<toast>` | — (use builder) | `<Toast>` | `basecoat::components::toast(props)` |
+| `<toaster>` | — (use builder) | `<Toaster>` | `basecoat::components::toaster(props)` |
+| `<tooltip>` | `<Tooltip>` | `<Tooltip>` | `basecoat::components::tooltip(props)` |
+| `<input>` | `<Input>` | `<Input>` | `basecoat::components::input(props)` |
+| `<label>` | `<Label>` | `<Label>` | `basecoat::components::label(props)` |
+| `<separator>` | `<Separator>` | `<Separator>` | `basecoat::components::separator(props)` |
+| `<textarea>` | `<Textarea>` | `<Textarea>` | `basecoat::components::textarea(props)` |
 
 **Note on Dialog, Tabs, Toaster in `rsx!`:** props with `Cow<'static, str>` fields
 require `Cow::Borrowed(...)` values, not bare `&str` string literals, because the
@@ -278,13 +278,13 @@ directly (see example above) or pass `Cow::Borrowed("value")` as the expression.
 
 ```toml
 [dependencies]
-basecoat-rs = { version = "0.1", features = ["ssr"] }
+basecoat = { version = "0.1", features = ["ssr"] }
 leptos = { version = "0.8", features = ["ssr"] }
 ```
 
 ```rust
-use basecoat_rs::leptos::*;
-use basecoat_rs::ButtonVariant;
+use basecoat::leptos::*;
+use basecoat::ButtonVariant;
 
 view! {
     <Button variant=ButtonVariant::Primary attr:id="save-btn">
@@ -299,13 +299,13 @@ This works across CSR, SSR, and hydrate feature modes.
 For CSR-only:
 
 ```toml
-basecoat-rs = { version = "0.1", features = ["csr"] }
+basecoat = { version = "0.1", features = ["csr"] }
 ```
 
 For hydration:
 
 ```toml
-basecoat-rs = { version = "0.1", features = ["hydrate"] }
+basecoat = { version = "0.1", features = ["hydrate"] }
 ```
 
 ---

@@ -3,7 +3,12 @@ name = "basecoat-components"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
+authors.workspace = true
+repository.workspace = true
+readme = "../../README.md"
 description = "HTML-string component functions for basecoat-rs"
+keywords = ["ui", "html", "tailwind", "components", "ssr"]
+categories = ["web-programming", "template-engine"]
 
 [dependencies]
 basecoat-core = { workspace = true }

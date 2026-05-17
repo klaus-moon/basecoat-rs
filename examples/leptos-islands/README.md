@@ -1,6 +1,6 @@
 # leptos-islands example
 
-Demonstrates `basecoat_rs::leptos::*` components (CSR-only path for v0.1).
+Demonstrates `basecoat::leptos::*` components (CSR-only path for v0.1).
 
 ## Why CSR-only?
 
@@ -27,19 +27,19 @@ When you're ready for SSR + hydration:
 
 ```toml
 [dependencies]
-basecoat-rs = { version = "0.1", features = ["hydrate"] }
+basecoat = { version = "0.1", features = ["hydrate"] }
 leptos = { version = "0.8", features = ["hydrate"] }
 ```
 
 Add `cargo-leptos` and follow the [Leptos SSR guide](https://book.leptos.dev/).
-The `basecoat_rs::leptos::*` components work unchanged in all three Leptos modes
+The `basecoat::leptos::*` components work unchanged in all three Leptos modes
 (`csr`, `ssr`, `hydrate`).
 
 ## Usage
 
 ```rust
-use basecoat_rs::leptos::*;
-use basecoat_rs::ButtonVariant;
+use basecoat::leptos::*;
+use basecoat::ButtonVariant;
 
 view! {
     <Button variant=ButtonVariant::Primary attr:id="save-btn">

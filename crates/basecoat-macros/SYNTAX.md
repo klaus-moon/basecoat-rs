@@ -303,7 +303,7 @@ The five HTML characters escaped: `&` → `&amp;`, `<` → `&lt;`, `>` → `&gt;
 
 Runtime helpers live in `::basecoat_macros_rt` (the `basecoat-macros-rt` crate,
 which must be in scope in the user's dependency tree — it is re-exported by the
-umbrella `basecoat-rs` crate).
+umbrella `basecoat` crate).
 
 ---
 

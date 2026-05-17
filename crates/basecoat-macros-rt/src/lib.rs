@@ -6,21 +6,9 @@
 //! (the `proc-macro = true` restriction means `lib.rs` items other than
 //! `#[proc_macro]` fns are not accessible to downstream crates).
 //!
-//! The umbrella `basecoat-rs` crate re-exports this as
-//! `basecoat_rs::macros_rt` (or transitively, so users don't need to add it
-//! to their own `Cargo.toml`).  Phase 3 must add:
-//!
-//! ```toml
-//! # in crates/basecoat-rs/Cargo.toml
-//! basecoat-macros-rt = { workspace = true }
-//! ```
-//!
-//! and re-export it:
-//!
-//! ```rust
-//! // in crates/basecoat-rs/src/lib.rs
-//! pub use basecoat_macros_rt as macros_rt;
-//! ```
+//! The umbrella `basecoat` crate re-exports this as
+//! `basecoat::basecoat_macros_rt` (or transitively, so users don't need to add it
+//! to their own `Cargo.toml`).
 
 use std::borrow::Cow;
 

@@ -10,7 +10,7 @@ name = "static-site"
 path = "src/main.rs"
 
 [dependencies]
-basecoat-rs = { workspace = true }
+basecoat = { workspace = true }
 # rsx! emits absolute paths ::basecoat_core and ::basecoat_components.
 # Those crates must be direct deps (extern-prelude) of any crate using rsx!.
 basecoat-core = { workspace = true }

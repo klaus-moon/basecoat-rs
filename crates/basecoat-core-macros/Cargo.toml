@@ -3,7 +3,12 @@ name = "basecoat-core-macros"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
+authors.workspace = true
+repository.workspace = true
+readme = "../../README.md"
 description = "Proc-macro derive for basecoat-core prop structs"
+keywords = ["proc-macro", "derive", "ui"]
+categories = ["web-programming"]
 
 [lib]
 proc-macro = true

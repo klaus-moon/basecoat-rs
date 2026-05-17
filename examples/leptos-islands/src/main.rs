@@ -1,4 +1,4 @@
-//! Leptos islands example — CSR-only, demonstrates `basecoat_rs::leptos::*`
+//! Leptos islands example — CSR-only, demonstrates `basecoat::leptos::*`
 //! components inside a Leptos `view!`.
 //!
 //! # Why CSR-only?
@@ -20,18 +20,18 @@
 // resolves correctly. These are compile-time checks; the imports and usage of
 // `std::any::type_name_of_val` prove the symbols exist without needing to
 // call them (Leptos components require a reactive runtime to execute).
-use basecoat_rs::leptos::{Alert, Badge, Button};
-use basecoat_rs::{AlertVariant, BadgeVariant, ButtonVariant};
+use basecoat::leptos::{Alert, Badge, Button};
+use basecoat::{AlertVariant, BadgeVariant, ButtonVariant};
 
 fn main() {
     println!("basecoat-rs leptos-islands example (CSR-only)");
-    println!("Components available via basecoat_rs::leptos::*:");
+    println!("Components available via basecoat::leptos::*:");
     println!("  Button, Badge, Alert, Card, Dialog, Input, Label,");
     println!("  Separator, Tabs, Textarea, Toast, Toaster, Tooltip");
     println!();
     println!("To use in a Leptos app:");
-    println!("  use basecoat_rs::leptos::*;");
-    println!("  use basecoat_rs::ButtonVariant;");
+    println!("  use basecoat::leptos::*;");
+    println!("  use basecoat::ButtonVariant;");
     println!();
     println!("  view! {{");
     println!("      <Button variant=ButtonVariant::Primary>\"Save\"</Button>");
