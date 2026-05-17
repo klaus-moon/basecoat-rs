@@ -1,0 +1,19 @@
+{
+  "name": "basecoat-rs",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "CSS build pipeline for basecoat-rs (Tailwind v4 + PostCSS)",
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.0",
+    "jiti": "^2.0.0",
+    "postcss": "^8.4.0",
+    "postcss-cli": "^11.0.0",
+    "tailwindcss": "^4.3.0",
+    "typescript": "^5.6.0"
+  },
+  "scripts": {
+    "build:css": "postcss style/tailwind.css -o style/dist/basecoat-rs.css",
+    "build:css:min": "postcss style/tailwind.css -o style/dist/basecoat-rs.min.css --no-map"
+  }
+}

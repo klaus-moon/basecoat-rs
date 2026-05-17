@@ -1,6 +1,7 @@
 //! xtask — build automation for basecoat-rs.
 //!
 //! Usage:
+//!   cargo xtask build-css    Compile Tailwind CSS via `npm run build:css`
 //!   cargo xtask build-wasm   Build the WASM controllers bundle via wasm-pack
 //!   cargo xtask check        Run check + test + clippy across the workspace
 //!   cargo xtask smoke        Run the headless-browser smoke test (requires cargo-leptos)
@@ -12,11 +13,13 @@ fn main() -> ExitCode {
     let subcommand = args.get(1).map(String::as_str).unwrap_or("help");
 
     match subcommand {
+        "build-css" => cmd_build_css(),
         "build-wasm" => cmd_build_wasm(),
         "check" => cmd_check(),
         "smoke" => cmd_smoke(),
         _ => {
             eprintln!("Usage: cargo xtask <subcommand>");
+            eprintln!("  build-css    Compile Tailwind CSS via npm run build:css");
             eprintln!("  build-wasm   Build WASM controllers via wasm-pack");
             eprintln!("  check        cargo check + test + clippy (workspace)");
             eprintln!("  smoke        Headless-browser end-to-end smoke test");
@@ -52,6 +55,36 @@ fn cmd_smoke() -> ExitCode {
 }
 
 // ── subcommands ───────────────────────────────────────────────────────────────
+
+/// Compile the Tailwind v4 CSS bundle via the workspace npm pipeline.
+///
+/// Requires `node_modules/` to exist — run `npm install` first if not present.
+fn cmd_build_css() -> ExitCode {
+    if !std::path::Path::new("node_modules").exists() {
+        eprintln!("error: node_modules/ not found — run `npm install` first");
+        return ExitCode::from(2);
+    }
+
+    println!("==> npm run build:css");
+    let status = Command::new("npm")
+        .args(["run", "build:css"])
+        .status();
+
+    match status {
+        Err(e) => {
+            eprintln!("error: could not run npm: {e}");
+            ExitCode::FAILURE
+        }
+        Ok(s) if !s.success() => {
+            eprintln!("error: npm run build:css failed");
+            ExitCode::FAILURE
+        }
+        Ok(_) => {
+            println!("==> build-css done");
+            ExitCode::SUCCESS
+        }
+    }
+}
 
 /// Bootstrap shim written to `pkg/` after every wasm-pack build.
 ///

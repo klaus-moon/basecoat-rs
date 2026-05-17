@@ -38,10 +38,13 @@ pub fn dialog(props: DialogProps) -> Markup {
 
     let mut html = String::new();
 
-    // Trigger button
+    // Trigger button. Default class is `btn-outline`; users who want a
+    // different style should render their own trigger button in the parent
+    // markup and set `data-dialog-trigger="{id}"` on it instead of passing
+    // `props.trigger`.
     if let Some(trigger) = &props.trigger {
         html.push_str(&format!(
-            r#"<button type="button" data-dialog-trigger="{eid}" onclick="document.getElementById('{eid}').showModal()">{trigger}</button>"#,
+            r#"<button type="button" class="btn-outline" data-dialog-trigger="{eid}" onclick="document.getElementById('{eid}').showModal()">{trigger}</button>"#,
             eid = escape_attr(&id),
             trigger = trigger,
         ));

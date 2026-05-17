@@ -1,0 +1,20 @@
+/*
+ * basecoat-rs Tailwind v4 entry — compiled by PostCSS via `npm run build:css`.
+ *
+ * Tree-shaking: @source directives below tell Tailwind which files to scan for
+ * utility class names. Add your own application's source paths here when using
+ * basecoat-rs in a downstream project.
+ */
+@import "tailwindcss";
+
+/* Scan basecoat-rs crates for emitted utility classes. */
+@source "../crates/basecoat-core/src";
+@source "../crates/basecoat-components/src";
+@source "../crates/basecoat-leptos/src";
+@source "../crates/basecoat-rs/src";
+
+/* Scan example apps. */
+@source "../examples";
+
+/* basecoat component layer */
+@import "./basecoat.css";

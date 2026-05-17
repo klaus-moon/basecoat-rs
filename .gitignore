@@ -14,3 +14,8 @@ crates/basecoat-controllers/pkg/
 # Example build artifacts
 examples/static-site/dist/
 
+# Node.js dependencies (install via `npm install`)
+node_modules/
+
+# Compiled CSS output (generated via `npm run build:css`)
+style/dist/

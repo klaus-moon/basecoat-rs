@@ -175,32 +175,61 @@ directives — components render with no styles. See **Pitfalls** below.
 
 ### Working pattern
 
-1. **Install basecoat-css** from npm (or vendor the file manually):
+Install Node 20+ (one-time), then:
+
+1. **Add the PostCSS pipeline** to your project:
    ```sh
-   npm install basecoat-css
+   npm install -D tailwindcss @tailwindcss/postcss postcss postcss-cli
    ```
 
-2. **Create `style/tailwind.css`:**
+2. **Create `postcss.config.mjs`:**
+   ```js
+   import tailwindcss from '@tailwindcss/postcss';
+   export default { plugins: [tailwindcss()] };
+   ```
+
+3. **Create `style/tailwind.css`:**
    ```css
    @import "tailwindcss";
+
+   /* Scan your application's source for utility classes. */
    @source "../src";
+
+   /* basecoat component layer — vendor from the basecoat-rs repo or npm
+      (once published). For now, copy style/basecoat.css from basecoat-rs. */
    @import "./basecoat.css";
    ```
-   If you vendored the file instead of using npm, replace the last line with the
-   path to your vendored copy (e.g. `@import "./vendor/basecoat.css"`).
 
-3. **Leptos / cargo-leptos projects** — add one line to `Cargo.toml`:
-   ```toml
-   [package.metadata.leptos]
-   tailwind-input-file = "style/tailwind.css"
+   We don't publish an npm package yet (v0.1) — for now, vendor `style/basecoat.css`
+   from the basecoat-rs repo into your project. Once we publish to npm, downstream
+   users will be able to `npm install basecoat-rs` for the CSS bundle alongside
+   `cargo add basecoat-rs`.
+
+4. **Add a build script** to `package.json`:
+   ```json
+   {
+     "scripts": {
+       "build:css": "postcss style/tailwind.css -o public/styles.css"
+     }
+   }
    ```
-   cargo-leptos downloads the Tailwind v4 standalone binary automatically and
-   bundles the compiled CSS into `/pkg/<name>.css`. No extra tooling needed.
 
-4. **Axum / other Rust SSR frameworks** — either:
-   - Add a `build.rs` that invokes the Tailwind CLI as a build step, or
-   - Run `npx @tailwindcss/cli -i style/tailwind.css -o public/styles.css --watch`
-     alongside your dev server.
+5. **Run the pipeline** before `cargo build`:
+   ```sh
+   npm run build:css
+   ```
+
+### Cargo-leptos users
+
+Cargo-leptos users have two options:
+
+- **npm pattern (recommended, consistent with other examples):** Follow the
+  steps above. Remove `tailwind-input-file` from `[package.metadata.leptos]`
+  and reference the pre-built CSS via your `style-file`.
+- **cargo-leptos native:** Keep `tailwind-input-file = "style/tailwind.css"` in
+  `[package.metadata.leptos]`. cargo-leptos downloads the Tailwind v4 standalone
+  binary automatically — a parallel mechanism to the npm pipeline, but equally
+  valid. Both approaches produce the same output.
 
 ### Safelist note
 
@@ -214,7 +243,7 @@ source available at build time).
 | Symptom | Cause | Fix |
 |---------|-------|-----|
 | Components render with no styles | Using Tailwind v3 CDN + basecoat-css 0.3+ | Switch to the Tailwind v4 pipeline above |
-| `@apply` / `@layer` in output verbatim | CDN JIT can't process v4 directives | Use the Tailwind v4 CLI (standalone or via cargo-leptos) |
+| `@apply` / `@layer` in output verbatim | CDN JIT can't process v4 directives | Use the Tailwind v4 CLI (via npm or cargo-leptos) |
 | Classes purged at production build | `@source` path wrong or safelist missing | Verify `@source "../src"` resolves to your Rust source tree |
 
 ---

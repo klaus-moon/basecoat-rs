@@ -3,12 +3,26 @@
 Axum SSR server that renders a page via `rsx!` and serves the WASM controllers
 bundle so Dialog, Tabs, and Toast hydrate in the browser.
 
-## Setup (one-time)
+CSS is compiled at the workspace root using the Tailwind v4 PostCSS pipeline
+(`npm run build:css`) and embedded into the binary via `include_bytes!`.
 
-Build the WASM bundle:
+## Prerequisites
+
+### 1. Build the CSS bundle (workspace root, one-time)
 
 ```sh
-cargo install wasm-pack          # if not already installed
+npm install
+npm run build:css
+```
+
+This produces `style/dist/basecoat-rs.css` at the workspace root. The binary
+embeds this file via `include_bytes!` — if it does not exist, `cargo build`
+will fail with a clear error pointing to the missing path.
+
+### 2. Build the WASM controllers bundle (one-time)
+
+```sh
+cargo install wasm-pack   # if not already installed
 cargo xtask build-wasm
 ```
 
@@ -19,42 +33,42 @@ cargo run -p axum-ssr
 # Open http://localhost:3000
 ```
 
-## Tailwind safelist wiring
-
-To use Tailwind CSS with tree-shaking in your own project, the basecoat class
-safelist must be visible to Tailwind at build time. The recommended pattern:
-
-**1. Write the safelist from `build.rs`:**
-
-```rust
-// build.rs
-fn main() {
-    let safelist = basecoat_components::class_safelist();
-    let out = std::path::PathBuf::from(std::env::var("OUT_DIR").unwrap())
-        .join("basecoat-safelist.txt");
-    std::fs::write(&out, safelist).unwrap();
-    println!("cargo:rerun-if-changed=build.rs");
-}
-```
-
-**2. Reference it from your Tailwind config:**
-
-```css
-/* tailwind.css */
-@source "./target/debug/build/<your-crate>-*/out/basecoat-safelist.txt";
-```
-
-Or use a stable path by copying the file as a post-build step:
+If port 3000 is taken:
 
 ```sh
-# In your CI or Makefile:
-cargo build && \
-  find target -name basecoat-safelist.txt | head -1 | xargs -I{} cp {} basecoat-classes.txt
+PORT=4000 cargo run -p axum-ssr
+# Open http://localhost:4000
 ```
+
+## How tree-shaking works
+
+`style/tailwind.css` at the workspace root uses Tailwind v4 `@source` directives
+to scan Rust source files for utility class names:
 
 ```css
-@source "./basecoat-classes.txt";
+@source "../crates/basecoat-core/src";
+@source "../crates/basecoat-components/src";
+@source "../crates/basecoat-leptos/src";
+@source "../crates/basecoat-rs/src";
+@source "../examples";
 ```
 
-This example uses the CDN version of Tailwind for simplicity. In production,
-use a local Tailwind build with the safelist wired in as shown above.
+Tailwind only emits CSS for classes it finds in those files — unused utilities
+are dropped automatically. No safelist configuration is required.
+
+## Tailwind safelist API (no-build-step setups)
+
+The `class_safelist()` API from `basecoat-components` is still useful when you
+cannot run a local Tailwind build (e.g. static-site generation with a CDN
+fallback). See `examples/static-site/` for that pattern.
+
+## Compiled CSS location
+
+After running `npm run build:css` at the workspace root:
+
+```
+style/dist/basecoat-rs.css    # tree-shaken CSS bundle
+```
+
+The CSS is embedded into the binary via `include_bytes!` at compile time and
+served at `/static/styles.css` from memory — no disk I/O at request time.

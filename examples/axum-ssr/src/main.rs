@@ -3,9 +3,14 @@
 //!
 //! # Setup (one-time)
 //!
-//! Build the WASM bundle before running this server:
+//! 1. Build the CSS bundle from the workspace root:
 //! ```sh
-//! wasm-pack build --release --target web crates/basecoat-controllers
+//! npm install && npm run build:css
+//! ```
+//!
+//! 2. Build the WASM controllers bundle:
+//! ```sh
+//! cargo xtask build-wasm
 //! ```
 //!
 //! # Run
@@ -20,10 +25,28 @@
 
 use std::borrow::Cow;
 
-use axum::{Router, response::Html, routing::get};
+use axum::{Router, response::Html, response::Response, routing::get};
 use basecoat_rs::components::{dialog, tabs, toaster};
 use basecoat_rs::{ButtonVariant, Children, DialogProps, TabSet, TabsProps, ToasterProps, rsx};
 use tower_http::services::ServeDir;
+
+/// Compiled CSS embedded at build time.
+///
+/// Requires `style/dist/basecoat-rs.css` to exist at the workspace root.
+/// Run `npm install && npm run build:css` from the workspace root once before
+/// building. If the file is missing, `include_bytes!` will fail with a clear
+/// path error pointing to the missing file.
+const COMPILED_CSS: &[u8] = include_bytes!("../../../style/dist/basecoat-rs.css");
+
+async fn styles_handler() -> Response {
+    use axum::http::header;
+    let mut resp = Response::new(axum::body::Body::from(COMPILED_CSS));
+    resp.headers_mut().insert(
+        header::CONTENT_TYPE,
+        "text/css; charset=utf-8".parse().unwrap(),
+    );
+    resp
+}
 
 #[tokio::main]
 async fn main() {
@@ -32,13 +55,16 @@ async fn main() {
 
     let app = Router::new()
         .route("/", get(index_handler))
+        .route("/static/styles.css", get(styles_handler))
         .nest_service("/static", ServeDir::new(static_dir));
 
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:3000")
+    let port = std::env::var("PORT").unwrap_or_else(|_| "3000".into());
+    let addr = format!("0.0.0.0:{port}");
+    let listener = tokio::net::TcpListener::bind(&addr)
         .await
-        .expect("failed to bind port 3000");
+        .expect("bind failed");
 
-    println!("Listening on http://localhost:3000");
+    println!("Listening on http://localhost:{port}");
     axum::serve(listener, app).await.expect("server error");
 }
 
@@ -50,15 +76,18 @@ fn render_page() -> String {
     // Build interactive components outside rsx! so we can use typed builders
     // with Cow values (string literals in rsx! attributes are &str which does
     // not implement Into<Cow<'static, str>> through Option).
+    // `trigger` becomes the OUTSIDE button that opens the dialog;
+    // `children` is the dialog body (rendered inside the modal).
     let dialog_html = dialog(
         DialogProps::builder()
             .id(Cow::Borrowed("demo-dialog"))
+            .trigger(Some(basecoat_rs::Markup::from("Open Dialog")))
             .title(Cow::Borrowed("Confirm Action"))
             .description(Cow::Borrowed(
                 "This dialog is rendered server-side and hydrated by the WASM controller.",
             ))
             .children(Children::from(
-                r#"<button class="btn-primary" data-dialog-trigger="demo-dialog">Open Dialog</button>"#.to_owned(),
+                "<p>Press <kbd>Esc</kbd> or click outside the dialog to close.</p>",
             ))
             .build(),
     );
@@ -103,12 +132,8 @@ fn render_page() -> String {
                 <meta charset="UTF-8" />
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                 <title>"basecoat-rs Axum SSR demo"</title>
-                <link
-                    rel="stylesheet"
-                    href="https://cdn.jsdelivr.net/npm/basecoat-css@latest/dist/basecoat.css"
-                />
-                <script src="https://cdn.tailwindcss.com" />
-                <script type="module" src="/static/basecoat_controllers.js" />
+                <link rel="stylesheet" href="/static/styles.css" />
+                <script type="module" src="/static/basecoat-controllers.init.js" />
             </head>
             <body class="p-8 max-w-2xl mx-auto space-y-8">
                 <h1 class="text-3xl font-bold">"basecoat-rs · Axum SSR"</h1>

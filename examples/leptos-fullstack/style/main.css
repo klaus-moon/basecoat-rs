@@ -1,6 +1,5 @@
 /* Loaded by cargo-leptos; injected into the page as /pkg/leptos-fullstack.css.
-   basecoat CSS is loaded from the CDN <link> in App — keep this file as a
-   placeholder for any app-specific overrides. */
-body {
-    font-family: system-ui, sans-serif;
-}
+   The workspace-compiled CSS (style/dist/basecoat-rs.css) is the canonical
+   bundle. Run `npm install && npm run build:css` from the workspace root once
+   before building. */
+@import url("../../../style/dist/basecoat-rs.css");

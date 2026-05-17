@@ -35,6 +35,24 @@ Run anywhere a Rust binary can run — no web framework required.
 
 ---
 
+## Building the CSS
+
+The Tailwind v4 + PostCSS pipeline lives at the workspace root. Run once before
+building any example:
+
+```sh
+npm install          # installs tailwindcss, @tailwindcss/postcss, postcss-cli
+npm run build:css    # produces style/dist/basecoat-rs.css
+```
+
+Or via xtask (checks that `node_modules/` exists first):
+
+```sh
+cargo xtask build-css
+```
+
+---
+
 ## Running the examples
 
 Three examples live under `examples/`. Run them from the workspace root.
@@ -42,9 +60,10 @@ Three examples live under `examples/`. Run them from the workspace root.
 ### `axum-ssr` — full browser demo (Dialog, Tabs, Toast hydrated)
 
 ```sh
-# One-time setup — build the WASM controllers bundle.
-cargo install wasm-pack      # if not already installed
-cargo xtask build-wasm       # produces crates/basecoat-controllers/pkg/
+# One-time setup — build CSS bundle and WASM controllers.
+npm install && npm run build:css   # workspace CSS pipeline
+cargo install wasm-pack            # if not already installed
+cargo xtask build-wasm             # produces crates/basecoat-controllers/pkg/
 
 # Run the server.
 cargo run -p axum-ssr
@@ -54,10 +73,6 @@ cargo run -p axum-ssr
 Open `http://localhost:3000` in a browser. You'll see Buttons, hydrated Tabs,
 a Dialog with an "Open" trigger, and a "Show Toast" button that calls
 `window.basecoat.toast(...)` from JavaScript.
-
-Tailwind is loaded from the CDN in this example for simplicity — see
-`examples/axum-ssr/README.md` for how to wire the safelist into a local
-Tailwind build for production.
 
 ### `leptos-islands` — Leptos adapter smoke check (CSR-only)
 
