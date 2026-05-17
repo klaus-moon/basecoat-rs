@@ -169,6 +169,8 @@ Three design bets differentiate this library from ad-hoc component modules:
 
 - [INTEGRATION.md](./INTEGRATION.md) — framework integration contract
 - [SYNTAX.md](./crates/basecoat-macros/SYNTAX.md) — rsx! macro language spec
+- [ROADMAP.md](./ROADMAP.md) — v0.2 scope and the infrastructure it needs
+- [CHANGELOG.md](./CHANGELOG.md) — release notes
 - [LICENSE](./LICENSE) — MIT
 
 ---
