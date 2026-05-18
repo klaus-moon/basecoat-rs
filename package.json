@@ -5,6 +5,7 @@
   "type": "module",
   "description": "CSS build pipeline for basecoat-rs (Tailwind v4 + PostCSS)",
   "devDependencies": {
+    "@floating-ui/dom": "^1.6.0",
     "@tailwindcss/postcss": "^4.3.0",
     "jiti": "^2.0.0",
     "postcss": "^8.4.0",

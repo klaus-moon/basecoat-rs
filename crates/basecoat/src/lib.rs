@@ -34,6 +34,9 @@ pub use basecoat_macros::rsx;
 // every transitive dependency.
 pub use basecoat_macros_rt;
 
+// ── Component CSS source (consume via basecoat::css::SOURCE) ─────────────────
+pub use basecoat_css as css;
+
 // ── Optional Leptos adapter ───────────────────────────────────────────────────
 #[cfg(feature = "leptos")]
 pub use basecoat_leptos as leptos;

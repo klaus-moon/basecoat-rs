@@ -257,10 +257,11 @@ checksum = "72b3254f16251a8381aa12e40e3c4d2f0199f8c6508fbecb9d91f575e0fbb8c6"
 
 [[package]]
 name = "basecoat"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "basecoat-components",
  "basecoat-core",
+ "basecoat-css",
  "basecoat-leptos",
  "basecoat-macros",
  "basecoat-macros-rt",
@@ -268,7 +269,7 @@ dependencies = [
 
 [[package]]
 name = "basecoat-components"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "basecoat-core",
  "insta",
@@ -276,7 +277,7 @@ dependencies = [
 
 [[package]]
 name = "basecoat-controllers"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "console_error_panic_hook",
  "js-sys",
@@ -288,14 +289,14 @@ dependencies = [
 
 [[package]]
 name = "basecoat-core"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "basecoat-core-macros",
 ]
 
 [[package]]
 name = "basecoat-core-macros"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -303,8 +304,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "basecoat-css"
+version = "0.2.0"
+
+[[package]]
 name = "basecoat-leptos"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "basecoat-core",
  "leptos",
@@ -312,7 +317,7 @@ dependencies = [
 
 [[package]]
 name = "basecoat-macros"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "basecoat-core",
  "basecoat-macros-rt",
@@ -325,7 +330,7 @@ dependencies = [
 
 [[package]]
 name = "basecoat-macros-rt"
-version = "0.1.0"
+version = "0.2.0"
 
 [[package]]
 name = "basecoat-smoke-tests"

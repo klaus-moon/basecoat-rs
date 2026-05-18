@@ -13,6 +13,7 @@ categories = ["web-programming", "template-engine"]
 [dependencies]
 basecoat-core = { workspace = true }
 basecoat-components = { workspace = true }
+basecoat-css = { workspace = true }
 basecoat-macros = { workspace = true }
 basecoat-macros-rt = { workspace = true }
 basecoat-leptos = { workspace = true, optional = true }

@@ -2,10 +2,15 @@ pub mod alert;
 pub mod badge;
 pub mod button;
 pub mod card;
+pub mod combobox;
 pub mod dialog;
+pub mod dropdown;
 pub mod input;
 pub mod label;
+pub mod popover;
+pub mod select;
 pub mod separator;
+pub mod sidebar;
 pub mod tabs;
 pub mod textarea;
 pub mod toast;
@@ -23,3 +28,10 @@ pub use tabs::{TabSet, TabsOrientation, TabsProps};
 pub use textarea::TextareaProps;
 pub use toast::{ToastCategory, ToastProps, ToasterProps};
 pub use tooltip::TooltipProps;
+
+// v0.2 components
+pub use combobox::{ComboboxOption, ComboboxProps};
+pub use dropdown::{DropdownItem, DropdownProps};
+pub use popover::{PopoverPlacement, PopoverProps};
+pub use select::{SelectOption, SelectProps};
+pub use sidebar::SidebarProps;

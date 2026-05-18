@@ -2,8 +2,11 @@ use basecoat_core::{
     BadgeProps as CoreBadgeProps, BadgeVariant, ButtonProps as CoreButtonProps, ButtonVariant,
     classes,
 };
+use basecoat_core::props::combobox::ComboboxOption;
 use basecoat::leptos::{
-    DialogContent, DialogTrigger, Tabs, TabsList, TabsPanel, TabsTab, Toaster,
+    Combobox, DialogContent, DialogTrigger, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger,
+    Popover, PopoverContent, PopoverTrigger, Select, SelectOption, Sidebar, SidebarFooter,
+    SidebarHeader, SidebarNav, SidebarToggle, Tabs, TabsList, TabsPanel, TabsTab, Toaster,
 };
 use leptos::prelude::*;
 use leptos_meta::*;
@@ -55,6 +58,77 @@ pub fn App() -> impl IntoView {
                     <DialogContent id="demo-dialog">
                         <p>"This dialog is server-rendered then hydrated by the WASM controller."</p>
                     </DialogContent>
+                </section>
+
+                <section class="space-y-3">
+                    <h2 class="text-xl font-semibold">"Dropdown (hydrated controller)"</h2>
+                    <Dropdown id="demo-dropdown">
+                        <DropdownTrigger>"Open menu"</DropdownTrigger>
+                        <DropdownMenu label="Account actions">
+                            <DropdownItem value="profile">"Profile"</DropdownItem>
+                            <DropdownItem value="settings">"Settings"</DropdownItem>
+                            <DropdownItem value="logout">"Logout"</DropdownItem>
+                        </DropdownMenu>
+                    </Dropdown>
+                </section>
+
+                <section class="space-y-3">
+                    <h2 class="text-xl font-semibold">"Popover (hydrated controller)"</h2>
+                    <Popover id="demo-popover">
+                        <PopoverTrigger controls="demo-popover-content">
+                            "Show popover"
+                        </PopoverTrigger>
+                        <PopoverContent id="demo-popover-content">
+                            <p>"This popover is positioned via floating-ui."</p>
+                        </PopoverContent>
+                    </Popover>
+                </section>
+
+                <section class="space-y-3">
+                    <h2 class="text-xl font-semibold">"Select (hydrated controller)"</h2>
+                    <Select
+                        id="demo-select"
+                        name="fruit"
+                        label="Fruit"
+                        placeholder="Pick a fruit"
+                        options=vec![
+                            SelectOption::new("apple", "Apple"),
+                            SelectOption::new("banana", "Banana"),
+                            SelectOption::new("cherry", "Cherry"),
+                        ]
+                    />
+                </section>
+
+                <section class="space-y-3">
+                    <h2 class="text-xl font-semibold">"Sidebar (hydrated controller)"</h2>
+                    <Sidebar id="demo-sidebar">
+                        <SidebarHeader>
+                            <span class="font-medium">"basecoat"</span>
+                        </SidebarHeader>
+                        <SidebarNav>
+                            <a href="#dashboard">"Dashboard"</a>
+                            <a href="#settings">"Settings"</a>
+                        </SidebarNav>
+                        <SidebarFooter>
+                            <span class="text-xs">"v0.2"</span>
+                        </SidebarFooter>
+                    </Sidebar>
+                    <SidebarToggle target_id="demo-sidebar">"Toggle sidebar"</SidebarToggle>
+                </section>
+
+                <section class="space-y-3">
+                    <h2 class="text-xl font-semibold">"Combobox (hydrated controller)"</h2>
+                    <Combobox
+                        id="demo-combobox"
+                        name="framework"
+                        placeholder="Search framework"
+                        options=vec![
+                            ComboboxOption::new("leptos", "Leptos"),
+                            ComboboxOption::new("dioxus", "Dioxus"),
+                            ComboboxOption::new("yew", "Yew"),
+                            ComboboxOption::new("sycamore", "Sycamore"),
+                        ]
+                    />
                 </section>
 
                 <section class="space-y-3">

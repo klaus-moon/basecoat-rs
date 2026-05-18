@@ -115,11 +115,11 @@ Useful as a template for static site generators or build scripts.
 | Dialog | v0.1 | v0.1 | v0.1 |
 | Tabs | v0.1 | v0.1 | v0.1 |
 | Toast / Toaster | v0.1 | v0.1 | v0.1 |
-| Dropdown | — | — | v0.2 |
-| Popover | — | — | v0.2 |
-| Select | — | — | v0.2 |
-| Sidebar | — | — | v0.2 |
-| Combobox | — | — | v0.2 |
+| Dropdown | v0.2 | v0.2 | v0.2 |
+| Popover | v0.2 | v0.2 | v0.2 |
+| Select | v0.2 | v0.2 | v0.2 |
+| Sidebar | v0.2 | v0.2 | v0.2 |
+| Combobox | v0.2 | v0.2 | v0.2 |
 
 ---
 

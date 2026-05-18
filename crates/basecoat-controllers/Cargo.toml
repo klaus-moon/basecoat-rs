@@ -14,10 +14,15 @@ categories = ["wasm", "web-programming"]
 crate-type = ["cdylib", "rlib"]
 
 [features]
-default = ["dialog", "tabs", "toast", "panic-hook"]
+default = ["dialog", "tabs", "toast", "dropdown", "popover", "select", "sidebar", "combobox", "panic-hook"]
 dialog = []
 tabs = []
 toast = []
+dropdown = []
+popover = []
+select = []
+sidebar = []
+combobox = []
 panic-hook = ["console_error_panic_hook"]
 
 [dependencies]
@@ -30,6 +35,9 @@ web-sys = { workspace = true, features = [
     "HtmlElement",
     "HtmlDialogElement",
     "HtmlButtonElement",
+    "HtmlSelectElement",
+    "HtmlInputElement",
+    "HtmlOptionElement",
     "Event",
     "EventInit",
     "EventTarget",
@@ -40,12 +48,17 @@ web-sys = { workspace = true, features = [
     "MouseEventInit",
     "FocusEvent",
     "NodeList",
+    "Node",
     "DomTokenList",
     "DomRect",
+    "MediaQueryList",
+    "MediaQueryListEvent",
+    "Storage",
+    "Location",
     "console",
 ] }
+wasm-bindgen-futures = "0.4"
 console_error_panic_hook = { version = "0.1", optional = true }
 
 [dev-dependencies]
 wasm-bindgen-test = "0.3"
-wasm-bindgen-futures = "0.4"

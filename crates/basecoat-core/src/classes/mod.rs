@@ -2,10 +2,15 @@ pub mod alert;
 pub mod badge;
 pub mod button;
 pub mod card;
+pub mod combobox;
 pub mod dialog;
+pub mod dropdown;
 pub mod input;
 pub mod label;
+pub mod popover;
+pub mod select;
 pub mod separator;
+pub mod sidebar;
 pub mod tabs;
 pub mod textarea;
 pub mod toast;
@@ -23,3 +28,10 @@ pub use tabs::tabs;
 pub use textarea::textarea;
 pub use toast::toast;
 pub use tooltip::tooltip;
+
+// v0.2 class fns
+pub use combobox::combobox;
+pub use dropdown::dropdown;
+pub use popover::popover;
+pub use select::select;
+pub use sidebar::sidebar;

@@ -18,10 +18,9 @@
 
 use wasm_bindgen::JsCast;
 use wasm_bindgen::prelude::*;
-use web_sys::{
-    CustomEvent, CustomEventInit, Element, HtmlDialogElement, HtmlElement, KeyboardEvent,
-    MouseEvent,
-};
+use web_sys::{Element, HtmlDialogElement, HtmlElement, KeyboardEvent, MouseEvent};
+
+use super::util::dispatch_initialized;
 
 const FOCUSABLE: &str = concat!(
     "a[href],button:not([disabled]),input:not([disabled]),",
@@ -271,18 +270,3 @@ fn trap_focus(container: &Element, shift: bool) {
     let _ = focusables[next].focus();
 }
 
-fn dispatch_initialized(el: &Element, name: &str) {
-    let init = CustomEventInit::new();
-    let detail = js_sys::Object::new();
-    let _ = js_sys::Reflect::set(
-        &detail,
-        &JsValue::from_str("name"),
-        &JsValue::from_str(name),
-    );
-    init.set_detail(&detail);
-    init.set_bubbles(true);
-    if let Ok(ev) = CustomEvent::new_with_event_init_dict("basecoat:initialized", &init) {
-        let target: &web_sys::EventTarget = el.as_ref();
-        let _ = target.dispatch_event(&ev);
-    }
-}

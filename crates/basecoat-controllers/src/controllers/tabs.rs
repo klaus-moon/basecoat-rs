@@ -8,11 +8,21 @@
 //   - Roving tabindex: active tab tabindex="0", others "-1".
 //   - Dispatch basecoat:initialized after wiring.
 //
+// Keyboard navigation is delegated to `super::keyboard::RovingTabindex`; the
+// `RovingHandle` is intentionally leaked because the tablist (like the
+// dialog) lives for the lifetime of the page.
+//
 // Closure lifetime: Closure::forget() — same rationale as dialog.rs.
+
+use std::cell::RefCell;
+use std::rc::Rc;
 
 use wasm_bindgen::JsCast;
 use wasm_bindgen::prelude::*;
-use web_sys::{Element, HtmlElement, KeyboardEvent, MouseEvent};
+use web_sys::{Element, HtmlElement, MouseEvent};
+
+use super::keyboard::{self, Orientation, RovingOpts};
+use super::util::dispatch_initialized;
 
 pub fn attach(root: Element) {
     let tablist_node = match root.query_selector("[role='tablist']") {
@@ -53,41 +63,53 @@ pub fn attach(root: Element) {
         on_click.forget();
     }
 
-    // Wire keydown on the tablist for arrow/home/end navigation.
+    // Wire arrow/Home/End navigation via the shared RovingTabindex helper.
+    // We additionally hook a focusin listener on each tab so the panel
+    // switches to whatever tab the helper just focused. The RovingHandle is
+    // leaked because tabs share the page-lifetime listener pattern.
+    let orientation = if tablist_node
+        .get_attribute("aria-orientation")
+        .as_deref()
+        == Some("vertical")
     {
+        Orientation::Vertical
+    } else {
+        Orientation::Horizontal
+    };
+
+    let handle = keyboard::attach(
+        &tablist_node,
+        tabs.clone(),
+        RovingOpts {
+            orientation,
+            wrap: true,
+            type_ahead: false,
+        },
+    );
+    // Intentionally leak: tabs live for the lifetime of the page.
+    std::mem::forget(handle);
+
+    // Focus-driven activation: when a tab gains focus (e.g. via the roving
+    // helper's ArrowRight), activate it.
+    let active_idx = Rc::new(RefCell::new(initial));
+    for (idx, tab) in tabs.iter().enumerate() {
         let root_c = root.clone();
-        let tablist_c = tablist_node.clone();
         let tabs_c = tabs.clone();
-        let on_keydown = Closure::<dyn Fn(KeyboardEvent)>::new(move |e: KeyboardEvent| {
-            let orientation = tablist_c
-                .get_attribute("aria-orientation")
-                .unwrap_or_else(|| "horizontal".to_string());
-            let horizontal = orientation != "vertical";
-
-            let current = current_index(&tabs_c);
-            let len = tabs_c.len();
-
-            let next = match e.key().as_str() {
-                "ArrowRight" if horizontal => Some((current + 1) % len),
-                "ArrowLeft" if horizontal => Some(if current == 0 { len - 1 } else { current - 1 }),
-                "ArrowDown" if !horizontal => Some((current + 1) % len),
-                "ArrowUp" if !horizontal => Some(if current == 0 { len - 1 } else { current - 1 }),
-                "Home" => Some(0),
-                "End" => Some(len - 1),
-                _ => None,
-            };
-
-            if let Some(idx) = next {
-                e.prevent_default();
+        let active_idx_c = active_idx.clone();
+        let on_focus = Closure::<dyn Fn(web_sys::FocusEvent)>::new(
+            move |_e: web_sys::FocusEvent| {
+                if *active_idx_c.borrow() == idx {
+                    return;
+                }
+                *active_idx_c.borrow_mut() = idx;
                 activate_tab(&root_c, &tabs_c, idx);
-                // Focus the newly activated tab.
-                let _ = tabs_c[idx].focus();
-            }
-        });
-        tablist_node
-            .add_event_listener_with_callback("keydown", on_keydown.as_ref().unchecked_ref())
+            },
+        );
+        let target: &web_sys::EventTarget = tab.as_ref();
+        target
+            .add_event_listener_with_callback("focus", on_focus.as_ref().unchecked_ref())
             .unwrap_or_default();
-        on_keydown.forget();
+        on_focus.forget();
     }
 
     dispatch_initialized(&root, "tabs");
@@ -98,7 +120,7 @@ pub fn attach(root: Element) {
 // ---------------------------------------------------------------------------
 
 fn collect_role(container: &Element, role: &str) -> Vec<HtmlElement> {
-    let selector = format!("[role='{}']", role);
+    let selector = format!("[role='{role}']");
     let node_list = match container.query_selector_all(&selector) {
         Ok(node_list) => node_list,
         Err(_) => return vec![],
@@ -112,23 +134,6 @@ fn collect_role(container: &Element, role: &str) -> Vec<HtmlElement> {
         }
     }
     out
-}
-
-fn current_index(tabs: &[HtmlElement]) -> usize {
-    let document = web_sys::window().and_then(|w| w.document());
-    let active = document.and_then(|d| d.active_element());
-    if let Some(a) = active
-        && let Some(idx) = tabs.iter().position(|t| {
-            let t_el: &Element = t.as_ref();
-            t_el == &a
-        })
-    {
-        return idx;
-    }
-    // Fall back to aria-selected tab.
-    tabs.iter()
-        .position(|t| t.get_attribute("aria-selected").as_deref() == Some("true"))
-        .unwrap_or(0)
 }
 
 fn activate_tab(root: &Element, tabs: &[HtmlElement], idx: usize) {
@@ -156,22 +161,5 @@ fn activate_tab(root: &Element, tabs: &[HtmlElement], idx: usize) {
         } else {
             let _ = panel_el.set_attribute("hidden", "");
         }
-    }
-}
-
-fn dispatch_initialized(el: &Element, name: &str) {
-    use web_sys::{CustomEvent, CustomEventInit};
-    let init = CustomEventInit::new();
-    let detail = js_sys::Object::new();
-    let _ = js_sys::Reflect::set(
-        &detail,
-        &JsValue::from_str("name"),
-        &JsValue::from_str(name),
-    );
-    init.set_detail(&detail);
-    init.set_bubbles(true);
-    if let Ok(ev) = CustomEvent::new_with_event_init_dict("basecoat:initialized", &init) {
-        let target: &web_sys::EventTarget = el.as_ref();
-        let _ = target.dispatch_event(&ev);
     }
 }

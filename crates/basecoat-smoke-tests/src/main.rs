@@ -212,11 +212,13 @@ fn run_browser_assertions() -> Result<bool> {
 
     // ── assertion 1: hydration_succeeded ─────────────────────────────────────
     // Catches bug #2: __basecoat_start ran too early → roots never hydrated.
+    // v0.1 contributed Tabs, Dialog, Toaster (3). v0.2 adds Dropdown, Popover,
+    // Select, Sidebar, Combobox (5) for a total of 8.
     results.push(assert_js_eq(
         &tab,
         "hydration_succeeded",
         "document.querySelectorAll('[data-basecoat-hydrated=\"true\"]').length",
-        serde_json::json!(3),
+        serde_json::json!(8),
     ));
 
     // ── assertion 2: window_basecoat_exposed ──────────────────────────────────
@@ -358,15 +360,191 @@ fn run_browser_assertions() -> Result<bool> {
         });
     }
 
-    // ── assertion 7: toast_created_and_classed ───────────────────────────────
-    // Catches bug #4: no [data-toaster] found; and bug #6: toast missing class="toast".
+    // Close the dialog opened by the previous assertion so it doesn't intercept
+    // clicks on the v0.2 components rendered below it.
+    let _ = tab.evaluate(
+        "document.getElementById('demo-dialog')?.close();",
+        false,
+    );
+    thread::sleep(Duration::from_millis(100));
+
+    // ── assertion 7: dropdown_opens ──────────────────────────────────────────
+    // The dropdown root is a <details>; clicking the <summary> toggles `open`
+    // and the controller mirrors aria-expanded onto the summary.
     {
-        // Close the dialog first (press Escape) so it doesn't intercept clicks.
         let _ = tab.evaluate(
-            "document.getElementById('demo-dialog')?.close();",
+            "document.querySelector('#demo-dropdown > summary')?.click();",
+            false,
+        );
+        thread::sleep(Duration::from_millis(150));
+
+        let open = eval_bool(&tab, "document.getElementById('demo-dropdown')?.open ?? false");
+        let expanded = eval_string(
+            &tab,
+            "document.querySelector('#demo-dropdown > summary')?.getAttribute('aria-expanded') ?? 'NOT FOUND'",
+        );
+        let menu_visible = eval_bool(
+            &tab,
+            "(() => { const m = document.querySelector('#demo-dropdown [role=\"menu\"]'); if (!m) return false; return !m.hasAttribute('hidden'); })()",
+        );
+
+        let passed = open == Some(true)
+            && expanded.as_deref() == Some("true")
+            && menu_visible == Some(true);
+        let detail = format!(
+            "open={:?} aria-expanded={:?} menu_visible={:?}",
+            open, expanded, menu_visible,
+        );
+        results.push(AssertionResult {
+            name: "dropdown_opens",
+            passed,
+            detail,
+        });
+
+        // Close the dropdown so it doesn't shadow subsequent clicks.
+        let _ = tab.evaluate(
+            "(() => { const d = document.getElementById('demo-dropdown'); if (d) d.open = false; })();",
             false,
         );
         thread::sleep(Duration::from_millis(100));
+    }
+
+    // ── assertion 8: popover_opens ───────────────────────────────────────────
+    // Same <details>-based pattern as dropdown — click summary → open=true.
+    {
+        let _ = tab.evaluate(
+            "document.querySelector('#demo-popover > summary')?.click();",
+            false,
+        );
+        thread::sleep(Duration::from_millis(150));
+
+        let open = eval_bool(&tab, "document.getElementById('demo-popover')?.open ?? false");
+        let dialog_present = eval_bool(
+            &tab,
+            "!!document.querySelector('#demo-popover [role=\"dialog\"]')",
+        );
+
+        let passed = open == Some(true) && dialog_present == Some(true);
+        let detail = format!(
+            "open={:?} dialog_present={:?}",
+            open, dialog_present,
+        );
+        results.push(AssertionResult {
+            name: "popover_opens",
+            passed,
+            detail,
+        });
+
+        let _ = tab.evaluate(
+            "(() => { const d = document.getElementById('demo-popover'); if (d) d.open = false; })();",
+            false,
+        );
+        thread::sleep(Duration::from_millis(100));
+    }
+
+    // ── assertion 9: select_changes_value ────────────────────────────────────
+    // Open the listbox, click the second option, then verify the hidden native
+    // <select>'s value matches that option's data-value.
+    {
+        let _ = tab.evaluate(
+            "document.querySelector('#demo-select [data-select-trigger]')?.click();",
+            false,
+        );
+        thread::sleep(Duration::from_millis(150));
+
+        let _ = tab.evaluate(
+            "(() => { const opts = document.querySelectorAll('#demo-select [role=\"listbox\"] [role=\"option\"]'); if (opts[1]) opts[1].click(); })();",
+            false,
+        );
+        thread::sleep(Duration::from_millis(150));
+
+        let native_value = eval_string(
+            &tab,
+            "document.querySelector('#demo-select select[data-select-native]')?.value ?? 'NOT FOUND'",
+        );
+
+        let passed = native_value.as_deref() == Some("banana");
+        let detail = format!("native_value={:?}", native_value);
+        results.push(AssertionResult {
+            name: "select_changes_value",
+            passed,
+            detail,
+        });
+    }
+
+    // ── assertion 10: sidebar_toggle ─────────────────────────────────────────
+    // Click the sibling toggle button → aside data-state flips.
+    {
+        let initial_state = eval_string(
+            &tab,
+            "document.getElementById('demo-sidebar')?.getAttribute('data-state') ?? 'NOT FOUND'",
+        );
+
+        let _ = tab.evaluate(
+            "document.querySelector('[data-sidebar-toggle=\"demo-sidebar\"]')?.click();",
+            false,
+        );
+        thread::sleep(Duration::from_millis(150));
+
+        let after_state = eval_string(
+            &tab,
+            "document.getElementById('demo-sidebar')?.getAttribute('data-state') ?? 'NOT FOUND'",
+        );
+
+        let flipped = matches!(
+            (initial_state.as_deref(), after_state.as_deref()),
+            (Some("expanded"), Some("collapsed")) | (Some("collapsed"), Some("expanded"))
+        );
+        let detail = format!(
+            "initial={:?} after={:?}",
+            initial_state, after_state,
+        );
+        results.push(AssertionResult {
+            name: "sidebar_toggle",
+            passed: flipped,
+            detail,
+        });
+    }
+
+    // ── assertion 11: combobox_filters ───────────────────────────────────────
+    // Type two characters → number of visible options is strictly less than total.
+    {
+        let total = eval_string(
+            &tab,
+            "String(document.querySelectorAll('#demo-combobox [role=\"option\"]').length)",
+        );
+
+        // Focus the input, then dispatch a real `input` event after setting the value
+        // so the controller's listener runs the filter.
+        let _ = tab.evaluate(
+            "(() => { const i = document.querySelector('#demo-combobox input[role=\"combobox\"]'); if (!i) return; i.focus(); i.value = 'le'; i.dispatchEvent(new Event('input', { bubbles: true })); })();",
+            false,
+        );
+        thread::sleep(Duration::from_millis(200));
+
+        let visible = eval_string(
+            &tab,
+            "String(Array.from(document.querySelectorAll('#demo-combobox [role=\"option\"]')).filter(o => !o.hasAttribute('hidden') && o.offsetParent !== null).length)",
+        );
+
+        let total_n: usize = total.as_deref().and_then(|s| s.parse().ok()).unwrap_or(0);
+        let visible_n: usize = visible.as_deref().and_then(|s| s.parse().ok()).unwrap_or(0);
+
+        let passed = total_n > 0 && visible_n < total_n;
+        let detail = format!(
+            "total={:?} visible={:?}",
+            total, visible,
+        );
+        results.push(AssertionResult {
+            name: "combobox_filters",
+            passed,
+            detail,
+        });
+    }
+
+    // ── assertion 12: toast_created_and_classed ──────────────────────────────
+    // Catches bug #4: no [data-toaster] found; and bug #6: toast missing class="toast".
+    {
 
         // Click the Show Toast button (found by text content).
         let _ = tab.evaluate(

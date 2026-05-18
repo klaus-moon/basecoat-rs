@@ -1,0 +1,14 @@
+{
+  "name": "basecoat-rs-css",
+  "version": "0.2.0",
+  "description": "Component-layer CSS for basecoat-rs (Rust port of basecoat)",
+  "main": "basecoat.css",
+  "files": ["basecoat.css", "README.md"],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/klaus-moon/basecoat-rs.git",
+    "directory": "crates/basecoat-css/npm"
+  },
+  "keywords": ["css", "tailwind", "ui", "components", "basecoat"]
+}

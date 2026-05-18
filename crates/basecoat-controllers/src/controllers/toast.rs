@@ -18,6 +18,8 @@ use wasm_bindgen::JsCast;
 use wasm_bindgen::prelude::*;
 use web_sys::{CustomEvent, CustomEventInit, Element, MouseEvent};
 
+use super::util::dispatch_initialized;
+
 const MAX_VISIBLE: usize = 5;
 const DEFAULT_DURATION_MS: u32 = 5000;
 
@@ -343,19 +345,3 @@ fn html_escape(s: &str) -> String {
         .replace('"', "&quot;")
 }
 
-fn dispatch_initialized(el: &Element, name: &str) {
-    use web_sys::CustomEventInit;
-    let init = CustomEventInit::new();
-    let detail = js_sys::Object::new();
-    let _ = js_sys::Reflect::set(
-        &detail,
-        &JsValue::from_str("name"),
-        &JsValue::from_str(name),
-    );
-    init.set_detail(&detail);
-    init.set_bubbles(true);
-    if let Ok(ev) = CustomEvent::new_with_event_init_dict("basecoat:initialized", &init) {
-        let target: &web_sys::EventTarget = el.as_ref();
-        let _ = target.dispatch_event(&ev);
-    }
-}

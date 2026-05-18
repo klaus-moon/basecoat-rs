@@ -6,8 +6,8 @@
 use basecoat_core::classes;
 use basecoat_core::{
     AlertProps, AlertVariant, BadgeProps, BadgeVariant, ButtonProps, ButtonSize, ButtonVariant,
-    CardProps, DialogProps, InputProps, LabelProps, SeparatorProps, TabsProps, TextareaProps,
-    ToastProps, TooltipProps,
+    CardProps, ComboboxProps, DialogProps, DropdownProps, InputProps, LabelProps, PopoverProps,
+    SelectProps, SeparatorProps, SidebarProps, TabsProps, TextareaProps, ToastProps, TooltipProps,
 };
 use std::collections::BTreeSet;
 use std::env;
@@ -106,6 +106,37 @@ fn main() {
         content: std::borrow::Cow::Borrowed(""),
         ..Default::default()
     });
+
+    // ── v0.2 components ──────────────────────────────────────────────────────
+    for cls in classes::dropdown(&DropdownProps::default()).split_whitespace() {
+        set.insert(cls.to_string());
+    }
+    for cls in classes::popover(&PopoverProps::default()).split_whitespace() {
+        set.insert(cls.to_string());
+    }
+    for cls in classes::select(&SelectProps::default()).split_whitespace() {
+        set.insert(cls.to_string());
+    }
+    for cls in classes::sidebar(&SidebarProps::default()).split_whitespace() {
+        set.insert(cls.to_string());
+    }
+    for cls in classes::combobox(&ComboboxProps::default()).split_whitespace() {
+        set.insert(cls.to_string());
+    }
+    // Component-layer literals that the class fns may not return on default props.
+    for cls in [
+        "dropdown-menu",
+        "popover",
+        "select",
+        "select-native",
+        "select-trigger",
+        "sidebar",
+        "sidebar-header",
+        "sidebar-nav",
+        "sidebar-footer",
+    ] {
+        set.insert(cls.to_string());
+    }
 
     // Write output
     let out_dir = env::var("OUT_DIR").unwrap();

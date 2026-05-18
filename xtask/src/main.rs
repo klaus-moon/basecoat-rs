@@ -125,6 +125,31 @@ fn cmd_build_wasm() -> ExitCode {
         Ok(_) => {}
     }
 
+    // Copy the vendored @floating-ui/dom ESM bundle into pkg/vendor/.
+    // The JS shim under pkg/snippets/.../js/floating.js imports it via the
+    // relative path "../vendor/floating-ui.dom.esm.js"; keeping the file in
+    // pkg/ means the entire bundle is self-contained and copy-deployable.
+    let vendor_src =
+        "node_modules/@floating-ui/dom/dist/floating-ui.dom.esm.js";
+    let vendor_dir = "crates/basecoat-controllers/pkg/vendor";
+    let vendor_dst = "crates/basecoat-controllers/pkg/vendor/floating-ui.dom.esm.js";
+    match std::fs::create_dir_all(vendor_dir) {
+        Ok(()) => {}
+        Err(e) => {
+            eprintln!("error: could not create {vendor_dir}: {e}");
+            return ExitCode::FAILURE;
+        }
+    }
+    match std::fs::copy(vendor_src, vendor_dst) {
+        Ok(_) => println!("==> copied {vendor_src} → {vendor_dst}"),
+        Err(e) => {
+            eprintln!(
+                "error: could not copy {vendor_src}: {e} — run `npm install` to fetch @floating-ui/dom"
+            );
+            return ExitCode::FAILURE;
+        }
+    }
+
     // Write the init shim deterministically after every build.
     let shim_path = "crates/basecoat-controllers/pkg/basecoat-controllers.init.js";
     match std::fs::write(shim_path, INIT_JS_SHIM) {
@@ -141,8 +166,8 @@ fn cmd_build_wasm() -> ExitCode {
         Ok(gz) => {
             let kb = gz as f64 / 1024.0;
             println!("==> {wasm_path}: {kb:.1} KB gzipped");
-            if gz > 120 * 1024 {
-                eprintln!("warning: gzipped size exceeds 120 KB budget");
+            if gz > 200 * 1024 {
+                eprintln!("warning: gzipped size exceeds 200 KB budget");
             }
         }
         Err(e) => eprintln!("warning: could not read wasm file for size: {e}"),

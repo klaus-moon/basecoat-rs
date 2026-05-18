@@ -14,12 +14,32 @@ use wasm_bindgen::prelude::*;
 use web_sys::{Document, NodeList};
 
 pub mod controllers {
+    // Shared infrastructure — always available, used by every controller.
+    pub mod dismiss;
+    pub mod floating;
+    pub mod keyboard;
+    pub mod media;
+    pub mod util;
+
     #[cfg(feature = "dialog")]
     pub mod dialog;
     #[cfg(feature = "tabs")]
     pub mod tabs;
     #[cfg(feature = "toast")]
     pub mod toast;
+
+    // v0.2 components — populated by Phase 3 subagents; hydrate dispatch is
+    // wired in Phase 4 by the orchestrator.
+    #[cfg(feature = "dropdown")]
+    pub mod dropdown;
+    #[cfg(feature = "popover")]
+    pub mod popover;
+    #[cfg(feature = "select")]
+    pub mod select;
+    #[cfg(feature = "sidebar")]
+    pub mod sidebar;
+    #[cfg(feature = "combobox")]
+    pub mod combobox;
 }
 
 // Re-export for wasm-bindgen-test and downstream users.
@@ -29,6 +49,16 @@ pub use controllers::dialog;
 pub use controllers::tabs;
 #[cfg(feature = "toast")]
 pub use controllers::toast;
+#[cfg(feature = "dropdown")]
+pub use controllers::dropdown;
+#[cfg(feature = "popover")]
+pub use controllers::popover;
+#[cfg(feature = "select")]
+pub use controllers::select;
+#[cfg(feature = "sidebar")]
+pub use controllers::sidebar;
+#[cfg(feature = "combobox")]
+pub use controllers::combobox;
 
 // ---------------------------------------------------------------------------
 // WASM start hook
@@ -100,12 +130,13 @@ pub fn hydrate() {
             continue;
         }
 
-        // Version check.
+        // Version check — accept any major-version compatible release.
         let version = el.get_attribute("data-basecoat-version");
-        if version.as_deref() != Some("0.1") {
+        let version_ok = matches!(version.as_deref(), Some("0.1") | Some("0.2"));
+        if !version_ok {
             web_sys::console::warn_1(
                 &format!(
-                    "[basecoat] element {:?} has unexpected version {:?}; expected \"0.1\"",
+                    "[basecoat] element {:?} has unexpected version {:?}; expected \"0.1\" or \"0.2\"",
                     el.get_attribute("id"),
                     version
                 )
@@ -125,6 +156,16 @@ pub fn hydrate() {
             "tabs" => controllers::tabs::attach(el.clone()),
             #[cfg(feature = "toast")]
             "toast" => controllers::toast::attach(el.clone()),
+            #[cfg(feature = "dropdown")]
+            "dropdown" => controllers::dropdown::attach(el.clone()),
+            #[cfg(feature = "popover")]
+            "popover" => controllers::popover::attach(el.clone()),
+            #[cfg(feature = "select")]
+            "select" => controllers::select::attach(el.clone()),
+            #[cfg(feature = "sidebar")]
+            "sidebar" => controllers::sidebar::attach(el.clone()),
+            #[cfg(feature = "combobox")]
+            "combobox" => controllers::combobox::attach(el.clone()),
             other => {
                 web_sys::console::warn_1(
                     &format!("[basecoat] unknown controller \"{}\"", other).into(),

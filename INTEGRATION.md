@@ -1,7 +1,7 @@
 # Integration Guide
 
-Integration contract for basecoat v0.1 on Rust. This is the stable API surface
-that downstream frameworks depend on.
+Integration contract for basecoat v0.2 on Rust. This is the stable API
+surface that downstream frameworks depend on.
 
 ---
 
@@ -21,10 +21,11 @@ that downstream frameworks depend on.
 
 ```toml
 [dependencies]
-basecoat            = "0.1"
-basecoat-core       = "0.1"
-basecoat-components = "0.1"
-basecoat-macros-rt  = "0.1"
+basecoat            = "0.2"
+basecoat-core       = "0.2"
+basecoat-components = "0.2"
+basecoat-macros-rt  = "0.2"
+basecoat-css        = "0.2"   # optional: ships the component-layer CSS as a crate
 ```
 
 ---
@@ -115,7 +116,7 @@ window.basecoat.hydrate();   // re-scan DOM and attach controllers
 The JS package is versioned alongside the Rust crate. Pin to a specific version:
 
 ```html
-<script type="module" src="/static/basecoat_controllers.js?v=0.1.0"></script>
+<script type="module" src="/static/basecoat_controllers.js?v=0.2.0"></script>
 ```
 
 ### Build the bundle
@@ -195,15 +196,34 @@ Install Node 20+ (one-time), then:
    /* Scan your application's source for utility classes. */
    @source "../src";
 
-   /* basecoat component layer — vendor from the basecoat-rs repo or npm
-      (once published). For now, copy style/basecoat.css from basecoat-rs. */
+   /* basecoat component layer — see options below. */
    @import "./basecoat.css";
    ```
 
-   We don't publish an npm package yet (v0.1) — for now, vendor `style/basecoat.css`
-   from the basecoat-rs repo into your project. Once we publish to npm, downstream
-   users will be able to `npm install basecoat-rs` for the CSS bundle alongside
-   `cargo add basecoat`.
+   We ship the component-layer CSS in two forms; pick the one that fits your build:
+
+   **Option A — Rust crate (`basecoat-css`).** Add `basecoat-css = "0.2"` to your
+   `Cargo.toml`. In your `build.rs`, write the bundled CSS to a stable path and
+   reference it from your Tailwind entry:
+
+   ```rust
+   // build.rs
+   fn main() {
+       let dest = std::path::Path::new("style/basecoat.css");
+       basecoat_css::write_to(dest).unwrap();
+       println!("cargo:rerun-if-changed=build.rs");
+   }
+   ```
+
+   ```css
+   /* style/tailwind.css */
+   @import "tailwindcss";
+   @source "../src";
+   @import "./basecoat.css";
+   ```
+
+   **Option B — npm package (`basecoat-rs-css`).** `npm install basecoat-rs-css`,
+   then `@import "basecoat-rs-css/basecoat.css"` from your Tailwind entry.
 
 4. **Add a build script** to `package.json`:
    ```json

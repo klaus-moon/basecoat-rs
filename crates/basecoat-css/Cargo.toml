@@ -1,0 +1,13 @@
+[package]
+name = "basecoat-css"
+version = "0.2.0"
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+readme = "README.md"
+description = "Component-layer CSS source for basecoat-rs"
+keywords = ["css", "tailwind", "ui", "components"]
+categories = ["web-programming"]
+include = ["src/**/*", "assets/basecoat.css", "build.rs", "README.md", "Cargo.toml"]
+links = "basecoat_css_path"
