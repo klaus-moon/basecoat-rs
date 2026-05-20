@@ -152,7 +152,7 @@
 @layer components {
   .alert,
   .alert-destructive {
-    @apply relative w-full rounded-lg border px-4 py-3 text-sm grid has-[>svg]:grid-cols-[calc(var(--spacing)*4)_1fr] grid-cols-[0_1fr] has-[>svg]:gap-x-3 gap-y-0.5 items-start [&>svg]:size-4 [&>svg]:translate-y-0.5 [&>svg]:text-current;
+    @apply relative w-full rounded-lg border px-4 py-3 text-sm grid has-[>svg]:grid-cols-[--spacing(4)_1fr] grid-cols-[0_1fr] has-[>svg]:gap-x-3 gap-y-0.5 items-start [&>svg]:size-4 [&>svg]:translate-y-0.5 [&>svg]:text-current;
     
     > h2,
     > h3,
@@ -462,7 +462,7 @@
     
     &:checked:after {
       @apply content-[''] block size-3.5 bg-primary-foreground;
-      @apply mask-[image:var(--check-icon)] mask-size-[0.875rem] mask-no-repeat mask-center;
+      @apply mask-(--check-icon) mask-size-[0.875rem] mask-no-repeat mask-center;
     }
   }
 }
@@ -518,7 +518,7 @@
       @apply bg-black/50 opacity-0 transition-all transition-discrete;
     }
     > * {
-      @apply bg-background fixed top-[50%] left-[50%] z-50 flex flex-col w-full max-w-[calc(100%_-_2rem)] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-lg border shadow-lg sm:max-w-lg max-h-[min(640px,calc(100%_-_2rem))];
+      @apply bg-background fixed top-[50%] left-[50%] z-50 flex flex-col w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-lg border shadow-lg sm:max-w-lg max-h-[min(640px,calc(100%-2rem))];
       @apply transition-all scale-95;
 
       > button,
@@ -560,7 +560,7 @@
       }
     }
     [role='menu'] {
-      @apply max-h-[300px] overflow-y-auto overflow-x-hidden p-1;
+      @apply max-h-75 overflow-y-auto overflow-x-hidden p-1;
 
       [role='menuitem'] {
         @apply aria-hidden:hidden relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none aria-disabled:opacity-50 aria-disabled:pointer-events-none disabled:opacity-50 disabled:pointer-events-none w-full truncate [&_svg:not([class*='text-'])]:text-muted-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4;
@@ -627,7 +627,7 @@
       @apply bg-black/50 opacity-0 transition-all transition-discrete;
     }
     > * {
-      @apply bg-background fixed top-[50%] left-[50%] z-50 flex flex-col w-full max-w-[calc(100%_-_2rem)] -translate-x-1/2 -translate-y-1/2 gap-4 rounded-lg border p-6 shadow-lg sm:max-w-lg max-h-[calc(100%_-_2rem)];
+      @apply bg-background fixed top-[50%] left-[50%] z-50 flex flex-col w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-4 rounded-lg border p-6 shadow-lg sm:max-w-lg max-h-[calc(100%-2rem)];
       @apply transition-all scale-95;
 
       > header {
@@ -707,7 +707,7 @@
     }
   }
   .field {
-    @apply flex flex-col w-full gap-3 data-[invalid=true]:text-destructive [&>*]:w-full [&>.sr-only]:w-auto;
+    @apply flex flex-col w-full gap-3 data-[invalid=true]:text-destructive *:w-full [&>.sr-only]:w-auto;
 
     h2,
     h3 {
@@ -1108,7 +1108,7 @@
               > summary {
                 &::after {
                   @apply content-[''] block size-3.5 bg-primary ml-auto transition-transform ease-linear;
-                  @apply mask-[image:var(--chevron-down-icon)] mask-size-[1rem] mask-no-repeat mask-center;
+                  @apply mask-(--chevron-down-icon) mask-size-[1rem] mask-no-repeat mask-center;
                 }
               }
               &::details-content {
@@ -1154,10 +1154,10 @@
       @apply hover:bg-muted/50 border-b transition-colors;
     }
     th {
-      @apply text-foreground h-10 px-2 text-left align-middle font-medium whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px];
+      @apply text-foreground h-10 px-2 text-left align-middle font-medium whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-0.5;
     }
     td {
-      @apply p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px];
+      @apply p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-0.5;
     }
     caption {
       @apply text-muted-foreground mt-4 text-sm;
@@ -1174,7 +1174,7 @@
       @apply bg-muted text-muted-foreground inline-flex h-9 w-fit items-center justify-center rounded-lg p-[3px];
 
       [role='tab'] {
-        @apply focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring text-foreground dark:text-muted-foreground inline-flex h-[calc(100%_-_1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-2 py-1 text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4;
+        @apply focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-2 py-1 text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4;
 
         &[aria-selected='true'] {
           @apply bg-background dark:text-foreground dark:border-input dark:bg-input/30 shadow-sm;

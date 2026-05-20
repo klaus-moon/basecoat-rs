@@ -20,7 +20,7 @@ members = [
 
 [workspace.package]
 edition = "2024"
-version = "0.2.0"
+version = "0.2.1"
 license = "MIT"
 authors = ["Klaus Moon <klausmoon.michael@gmail.com>"]
 repository = "https://github.com/klaus-moon/basecoat-rs"
@@ -44,12 +44,12 @@ tower-http = { version = "0.5", features = ["fs"] }
 leptos = { version = "0.8", default-features = false }
 
 # Internal crates
-basecoat-core = { path = "crates/basecoat-core", version = "0.2.0" }
-basecoat-core-macros = { path = "crates/basecoat-core-macros", version = "0.2.0" }
-basecoat-components = { path = "crates/basecoat-components", version = "0.2.0" }
-basecoat-css = { path = "crates/basecoat-css", version = "0.2.0" }
-basecoat-macros = { path = "crates/basecoat-macros", version = "0.2.0" }
-basecoat-macros-rt = { path = "crates/basecoat-macros-rt", version = "0.2.0" }
-basecoat-controllers = { path = "crates/basecoat-controllers", version = "0.2.0" }
-basecoat-leptos = { path = "crates/basecoat-leptos", version = "0.2.0" }
-basecoat = { path = "crates/basecoat", version = "0.2.0" }
+basecoat-core = { path = "crates/basecoat-core", version = "0.2.1" }
+basecoat-core-macros = { path = "crates/basecoat-core-macros", version = "0.2.1" }
+basecoat-components = { path = "crates/basecoat-components", version = "0.2.1" }
+basecoat-css = { path = "crates/basecoat-css", version = "0.2.1" }
+basecoat-macros = { path = "crates/basecoat-macros", version = "0.2.1" }
+basecoat-macros-rt = { path = "crates/basecoat-macros-rt", version = "0.2.1" }
+basecoat-controllers = { path = "crates/basecoat-controllers", version = "0.2.1" }
+basecoat-leptos = { path = "crates/basecoat-leptos", version = "0.2.1" }
+basecoat = { path = "crates/basecoat", version = "0.2.1" }

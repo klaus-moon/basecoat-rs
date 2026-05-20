@@ -7,9 +7,7 @@
 
 #![cfg(feature = "ssr")]
 
-use basecoat_core::{
-    AlertVariant, BadgeVariant, ButtonSize, ButtonVariant, TabsOrientation, ToastCategory,
-};
+use basecoat_core::{AlertVariant, BadgeVariant, ButtonSize, ButtonVariant};
 use basecoat_leptos::*;
 use leptos::prelude::*;
 
@@ -30,7 +28,9 @@ fn button_default_renders_btn_primary() {
 #[test]
 fn button_outline_sm() {
     let html = view! {
-        <Button variant=ButtonVariant::Outline size=ButtonSize::Sm>"Save"</Button>
+        <Button variant=ButtonVariant::Outline size=ButtonSize::Sm>
+            "Save"
+        </Button>
     }
     .to_html();
     assert!(
@@ -42,7 +42,9 @@ fn button_outline_sm() {
 #[test]
 fn button_lg_destructive() {
     let html = view! {
-        <Button variant=ButtonVariant::Destructive size=ButtonSize::Lg>"Delete"</Button>
+        <Button variant=ButtonVariant::Destructive size=ButtonSize::Lg>
+            "Delete"
+        </Button>
     }
     .to_html();
     assert!(
@@ -137,7 +139,9 @@ fn separator_renders_hr_with_role() {
 #[test]
 fn dialog_emits_hydration_markers() {
     let html = view! {
-        <Dialog id="my-dialog" title="Hello">"Dialog content"</Dialog>
+        <Dialog id="my-dialog" title="Hello">
+            "Dialog content"
+        </Dialog>
     }
     .to_html();
     assert!(
@@ -163,10 +167,14 @@ fn tabs_emits_hydration_markers() {
     let html = view! {
         <Tabs id="my-tabs">
             <TabsList>
-                <TabsTab controls="panel-1" selected=true>"Tab 1"</TabsTab>
+                <TabsTab controls="panel-1" selected=true>
+                    "Tab 1"
+                </TabsTab>
                 <TabsTab controls="panel-2">"Tab 2"</TabsTab>
             </TabsList>
-            <TabsPanel id="panel-1" selected=true>"Content 1"</TabsPanel>
+            <TabsPanel id="panel-1" selected=true>
+                "Content 1"
+            </TabsPanel>
             <TabsPanel id="panel-2">"Content 2"</TabsPanel>
         </Tabs>
     }
@@ -222,7 +230,7 @@ fn tooltip_renders_data_tooltip() {
 /// Confirm class-string parity between this crate and basecoat_core::classes directly.
 #[test]
 fn class_string_parity_with_core() {
-    use basecoat_core::{ButtonProps, classes};
+    use basecoat_core::{classes, ButtonProps};
 
     let core_class = classes::button(&ButtonProps {
         variant: ButtonVariant::Outline,
@@ -231,7 +239,9 @@ fn class_string_parity_with_core() {
     });
 
     let html = view! {
-        <Button variant=ButtonVariant::Outline size=ButtonSize::Sm>"x"</Button>
+        <Button variant=ButtonVariant::Outline size=ButtonSize::Sm>
+            "x"
+        </Button>
     }
     .to_html();
 
